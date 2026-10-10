@@ -7,9 +7,9 @@ class DemoScheduleRepository : ScheduleRepository {
     override suspend fun loadSchedule(course: String): Schedule = Schedule(course,
         (1..5).flatMap { day ->
             listOf(
-                Lesson(day, "08:00", "09:30", "Matemática", "Sala A-101"),
-                Lesson(day, "09:45", "11:15", "Lengua y Literatura", "Sala A-101"),
-                Lesson(day, "11:30", "13:00", "Historia", "Sala A-102"),
+                Lesson(day, "08:00", "09:30", "Matemática", "Sala A-101", RoomId("demo-a101")),
+                Lesson(day, "09:45", "11:15", "Lengua y Literatura", "Sala A-101", RoomId("demo-a101")),
+                Lesson(day, "11:30", "13:00", "Historia", "Sala A-102", RoomId("demo-a102")),
             )
         }
     )

@@ -8,6 +8,7 @@ data class Lesson(
     val endTime: String,
     val subject: String,
     val room: String,
+    val roomId: RoomId = RoomId(room),
 )
 
 data class Announcement(

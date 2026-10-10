@@ -3,6 +3,7 @@ package com.liceomap.app.ui.navigation
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.SavedStateHandle
 import com.liceomap.app.data.demo.DemoEntryResult
+import com.liceomap.app.model.RoomId
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -10,6 +11,18 @@ import org.junit.Rule
 import org.junit.Test
 
 class AppViewModelTest {
+    @Test
+    fun selectedDayAndRoomSurviveSavedStateRestoration() {
+        val handle = SavedStateHandle()
+        val vm = AppViewModel(handle)
+        vm.selectDay(5)
+        vm.openRoom(RoomId("demo-a102"))
+        val restored = AppViewModel(SavedStateHandle(handle.keys().associateWith { handle.get<Any?>(it) }))
+        assertEquals(5, restored.uiState.value.selectedDay)
+        assertEquals(RoomId("demo-a102"), restored.uiState.value.selectedRoom)
+        assertEquals(AppDestination.MAP, restored.uiState.value.destination)
+    }
+
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 

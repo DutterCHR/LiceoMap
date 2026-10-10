@@ -28,6 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.liceomap.app.model.DemoMap
 import com.liceomap.app.model.MapRegionKind
+import com.liceomap.app.model.RoomId
+import com.liceomap.app.model.DemoRooms
+import androidx.compose.material3.MaterialTheme
 
 private val MapViewportSaver = listSaver<MapViewport, Float>(
     save = { listOf(it.scale, it.x, it.y) },
@@ -35,7 +38,7 @@ private val MapViewportSaver = listSaver<MapViewport, Float>(
 )
 
 @Composable
-fun MapScreen(map: DemoMap) {
+fun MapScreen(map: DemoMap, selectedRoom: RoomId? = null) {
     var viewport by rememberSaveable(stateSaver = MapViewportSaver) {
         mutableStateOf(MapViewport())
     }
@@ -43,7 +46,7 @@ fun MapScreen(map: DemoMap) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F4F8))
+            .background(MaterialTheme.colorScheme.background)
             .clipToBounds()
             .pointerInput(Unit) {
                 detectTransformGestures { _, pan, zoom, _ ->
@@ -84,11 +87,14 @@ fun MapScreen(map: DemoMap) {
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .padding(16.dp)
-                .background(Color.White.copy(alpha = 0.9f), RoundedCornerShape(12.dp))
+                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.95f), RoundedCornerShape(12.dp))
                 .padding(12.dp)
         ) {
-            Text("📍 Tu Sala: ${map.room} (${map.pavilion})", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-            Text("Pellizca para zoom o arrastra para mover", fontSize = 12.sp, color = Color.Gray)
+            Text(selectedRoom?.let { DemoRooms.find(it)?.label ?: "Sala no registrada: ${it.value}" }
+                ?: "Mapa de demostración", fontWeight = FontWeight.Bold, fontSize = 14.sp)
+            Text("Esquema ficticio · Ubicación exacta pendiente del SVG", fontSize = 12.sp)
+            Text("Pellizca para zoom o arrastra para mover", fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }

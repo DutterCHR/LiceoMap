@@ -10,6 +10,7 @@ import com.liceomap.app.data.demo.*
 import com.liceomap.app.ui.announcements.AnnouncementsScreen
 import com.liceomap.app.ui.components.StatusCard
 import com.liceomap.app.ui.content.SchoolContentViewModel
+import com.liceomap.app.ui.content.rememberSchoolTime
 import com.liceomap.app.ui.home.HomeScreen
 import com.liceomap.app.ui.login.LoginScreen
 import com.liceomap.app.ui.map.MapScreen
@@ -22,6 +23,7 @@ fun AppNavigation(appViewModel: AppViewModel = viewModel(), contentViewModel: Sc
     val context = LocalContext.current
     val screenStateHolder = rememberSaveableStateHolder()
     val session = state.demoSession
+    val nowMillis by rememberSchoolTime()
 
     LaunchedEffect(session?.course) { session?.let { contentViewModel.load(it.course) } }
     if (session == null) {
@@ -41,12 +43,14 @@ fun AppNavigation(appViewModel: AppViewModel = viewModel(), contentViewModel: Sc
         MainScreen(session.course, state.destination, appViewModel::selectDestination) {
             screenStateHolder.SaveableStateProvider(state.destination.name) {
                 when (state.destination) {
-                    AppDestination.HOME -> HomeScreen(session, content, System.currentTimeMillis(),
+                    AppDestination.HOME -> HomeScreen(session, content, nowMillis,
                         appViewModel::selectDestination,
                         { appViewModel.selectDestination(AppDestination.ANNOUNCEMENTS) },
                         { contentViewModel.load(session.course) })
-                    AppDestination.MAP -> MapScreen(DemoData.map)
-                    AppDestination.SCHEDULE -> ScheduleScreen(session.course)
+                    AppDestination.MAP -> MapScreen(DemoData.map, state.selectedRoom)
+                    AppDestination.SCHEDULE -> ScheduleScreen(session.course, content.schedule,
+                        state.selectedDay, nowMillis, appViewModel::selectDay, appViewModel::openRoom,
+                        { contentViewModel.load(session.course) })
                     AppDestination.ANNOUNCEMENTS -> AnnouncementsScreen()
                     AppDestination.PROFILE -> StatusCard("Perfil de demostración", session.course)
                 }

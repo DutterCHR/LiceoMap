@@ -41,7 +41,7 @@ fun HomeScreen(
                         Text(if (summary.current != null) "En este momento" else "Próxima clase",
                             color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.labelLarge)
                         Text(occurrence.lesson.subject, style = MaterialTheme.typography.headlineSmall)
-                        Text("Día " + occurrence.lesson.dayOfWeek + " · " + occurrence.lesson.startTime + " – " + occurrence.lesson.endTime)
+                        Text(schoolDate(occurrence.startMillis) + " · " + occurrence.lesson.startTime + " – " + occurrence.lesson.endTime)
                         Text(occurrence.lesson.room)
                         FilledTonalButton(onClick = { onNavigate(AppDestination.SCHEDULE) }) { Text("Ver horario") }
                     }

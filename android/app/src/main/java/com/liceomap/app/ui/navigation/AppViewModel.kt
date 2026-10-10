@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import com.liceomap.app.data.demo.DemoEntry
 import com.liceomap.app.data.demo.DemoEntryResult
 import com.liceomap.app.model.DemoSession
+import com.liceomap.app.model.RoomId
+import com.liceomap.app.domain.ScheduleClock
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -17,6 +19,9 @@ class AppViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel()
             destination = AppDestination.entries.firstOrNull {
                 it.name == savedStateHandle.get<String>("destination")
             } ?: AppDestination.HOME,
+            selectedDay = savedStateHandle.get<Int>("selectedDay")?.takeIf { it in 1..7 }
+                ?: ScheduleClock.dayOfWeek(System.currentTimeMillis()),
+            selectedRoom = savedStateHandle.get<String>("selectedRoom")?.takeIf { it.isNotBlank() }?.let(::RoomId),
         )
     )
     val uiState = mutableUiState.asStateFlow()
@@ -45,5 +50,17 @@ class AppViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel()
     fun selectDestination(destination: AppDestination) {
         savedStateHandle["destination"] = destination.name
         mutableUiState.update { it.copy(destination = destination) }
+    }
+
+    fun selectDay(day: Int) {
+        require(day in 1..7)
+        savedStateHandle["selectedDay"] = day
+        mutableUiState.update { it.copy(selectedDay = day) }
+    }
+
+    fun openRoom(room: RoomId) {
+        savedStateHandle["selectedRoom"] = room.value
+        mutableUiState.update { it.copy(selectedRoom = room) }
+        selectDestination(AppDestination.MAP)
     }
 }
