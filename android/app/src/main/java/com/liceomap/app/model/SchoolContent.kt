@@ -17,7 +17,11 @@ data class Announcement(
 )
 
 /** Asset reference for a future SVG renderer; no renderer is implemented in M01. */
-data class SvgMap(val assetPath: String)
+data class SvgRoomBinding(val roomId: RoomId, val elementId: String)
+
+data class SvgMap(val assetPath: String, val rooms: List<SvgRoomBinding> = emptyList()) {
+    fun elementFor(room: RoomId): String? = rooms.firstOrNull { it.roomId == room }?.elementId
+}
 
 enum class MapRegionKind { COURTYARD, CLASSROOMS, LABORATORIES, GYM }
 

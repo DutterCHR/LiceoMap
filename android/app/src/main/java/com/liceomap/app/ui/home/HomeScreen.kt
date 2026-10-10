@@ -11,6 +11,7 @@ import com.liceomap.app.model.*
 import com.liceomap.app.ui.components.*
 import com.liceomap.app.ui.content.SchoolContentState
 import com.liceomap.app.ui.navigation.AppDestination
+import com.liceomap.app.ui.announcements.AnnouncementCard
 
 @Composable
 fun HomeScreen(
@@ -71,11 +72,7 @@ fun HomeScreen(
                 if (announcements.data.isEmpty()) item { StatusCard("Todo al día", "No hay anuncios publicados.") }
                 announcements.data.take(2).forEach { announcement ->
                     item(key = announcement.id) {
-                        SchoolCard {
-                            Text(announcement.category, color = MaterialTheme.colorScheme.primary)
-                            Text(announcement.title, style = MaterialTheme.typography.titleMedium)
-                            TextButton(onClick = { onAnnouncement(announcement.id) }) { Text("Leer anuncio") }
-                        }
+                        AnnouncementCard(announcement) { onAnnouncement(announcement.id) }
                     }
                 }
             }

@@ -3,25 +3,32 @@ package com.liceomap.app.ui.navigation
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.liceomap.app.data.demo.DemoEntry
-import com.liceomap.app.data.demo.DemoEntryResult
-import com.liceomap.app.model.DemoSession
-import com.liceomap.app.model.RoomId
-import com.liceomap.app.domain.ScheduleClock
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import com.liceomap.app.domain.*
+import com.liceomap.app.model.*
+import com.liceomap.app.ui.theme.ThemeMode
+import kotlinx.coroutines.flow.*
 
 class AppViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
     private val mutableUiState = MutableStateFlow(
         AppUiState(
             rut = savedStateHandle["rut"] ?: "",
-            demoSession = savedStateHandle.get<String>("demoCourse")?.let(::DemoSession),
+            demoSession = savedStateHandle.get<String>("demoCourse")?.let {
+                DemoSession(it, savedStateHandle["studentName"])
+            },
             destination = AppDestination.entries.firstOrNull {
                 it.name == savedStateHandle.get<String>("destination")
             } ?: AppDestination.HOME,
             selectedDay = savedStateHandle.get<Int>("selectedDay")?.takeIf { it in 1..7 }
                 ?: ScheduleClock.dayOfWeek(System.currentTimeMillis()),
             selectedRoom = savedStateHandle.get<String>("selectedRoom")?.takeIf { it.isNotBlank() }?.let(::RoomId),
+            announcementId = savedStateHandle["announcementId"],
+            announcementCategory = savedStateHandle["announcementCategory"],
+            announcementOrder = AnnouncementOrder.entries.firstOrNull {
+                it.name == savedStateHandle.get<String>("announcementOrder")
+            } ?: AnnouncementOrder.NEWEST,
+            themeMode = ThemeMode.entries.firstOrNull {
+                it.name == savedStateHandle.get<String>("themeMode")
+            } ?: ThemeMode.SYSTEM,
         )
     )
     val uiState = mutableUiState.asStateFlow()
@@ -31,25 +38,18 @@ class AppViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel()
         mutableUiState.update { it.copy(rut = rut) }
     }
 
-    fun onPasswordChanged(password: String) {
-        // Retained during activity recreation by the ViewModel, never written to saved state.
-        mutableUiState.update { it.copy(password = password) }
-    }
-
-    fun enterDemo(): DemoEntryResult {
-        val state = uiState.value
-        val result = DemoEntry.enter(state.rut, state.password)
-        if (result is DemoEntryResult.Entered) {
-            savedStateHandle["demoCourse"] = result.session.course
-            savedStateHandle["destination"] = AppDestination.HOME.name
-            mutableUiState.update { it.copy(demoSession = result.session, password = "", destination = AppDestination.HOME) }
-        }
-        return result
+    fun enterDemo(): DemoSession {
+        val session = DemoEntry.enter()
+        savedStateHandle["demoCourse"] = session.course
+        savedStateHandle["destination"] = AppDestination.HOME.name
+        mutableUiState.update { it.copy(demoSession = session, destination = AppDestination.HOME) }
+        return session
     }
 
     fun selectDestination(destination: AppDestination) {
         savedStateHandle["destination"] = destination.name
-        mutableUiState.update { it.copy(destination = destination) }
+        savedStateHandle.remove<String>("announcementId")
+        mutableUiState.update { it.copy(destination = destination, announcementId = null) }
     }
 
     fun selectDay(day: Int) {
@@ -62,5 +62,41 @@ class AppViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel()
         savedStateHandle["selectedRoom"] = room.value
         mutableUiState.update { it.copy(selectedRoom = room) }
         selectDestination(AppDestination.MAP)
+    }
+
+    fun openAnnouncement(id: String) {
+        selectDestination(AppDestination.ANNOUNCEMENTS)
+        savedStateHandle["announcementId"] = id
+        mutableUiState.update { it.copy(announcementId = id) }
+    }
+
+    fun closeAnnouncement() {
+        savedStateHandle.remove<String>("announcementId")
+        mutableUiState.update { it.copy(announcementId = null) }
+    }
+
+    fun selectCategory(category: String?) {
+        savedStateHandle["announcementCategory"] = category
+        mutableUiState.update { it.copy(announcementCategory = category) }
+    }
+
+    fun selectOrder(order: AnnouncementOrder) {
+        savedStateHandle["announcementOrder"] = order.name
+        mutableUiState.update { it.copy(announcementOrder = order) }
+    }
+
+    fun selectTheme(mode: ThemeMode) {
+        savedStateHandle["themeMode"] = mode.name
+        mutableUiState.update { it.copy(themeMode = mode) }
+    }
+
+    fun initializeTheme(mode: ThemeMode) {
+        if (!savedStateHandle.contains("themeMode")) selectTheme(mode)
+    }
+
+    fun logout() {
+        val theme = uiState.value.themeMode
+        savedStateHandle.keys().filter { it != "themeMode" }.forEach { savedStateHandle.remove<Any?>(it) }
+        mutableUiState.value = AppUiState(themeMode = theme)
     }
 }

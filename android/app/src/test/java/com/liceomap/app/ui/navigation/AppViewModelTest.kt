@@ -2,115 +2,91 @@ package com.liceomap.app.ui.navigation
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.SavedStateHandle
-import com.liceomap.app.data.demo.DemoEntryResult
 import com.liceomap.app.model.RoomId
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
+import com.liceomap.app.domain.AnnouncementOrder
+import com.liceomap.app.ui.theme.ThemeMode
+import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
 
 class AppViewModelTest {
-    @Test
-    fun selectedDayAndRoomSurviveSavedStateRestoration() {
+    @get:Rule val instantTaskExecutorRule = InstantTaskExecutorRule()
+    private fun restore(handle: SavedStateHandle) = AppViewModel(SavedStateHandle(handle.keys().associateWith { handle.get<Any?>(it) }))
+
+    @Test fun startsAtLoginAndDemoOpensHomeWithoutCredentials() {
+        val vm = AppViewModel(SavedStateHandle())
+        assertNull(vm.uiState.value.demoSession)
+        assertEquals(AppDestination.HOME, vm.uiState.value.destination)
+        vm.enterDemo()
+        assertEquals("3° Medio A", vm.uiState.value.demoSession?.course)
+        assertEquals(AppDestination.HOME, vm.uiState.value.destination)
+    }
+    @Test fun everyDestinationCanBeSelectedAndSaved() {
         val handle = SavedStateHandle()
         val vm = AppViewModel(handle)
-        vm.selectDay(5)
-        vm.openRoom(RoomId("demo-a102"))
-        val restored = AppViewModel(SavedStateHandle(handle.keys().associateWith { handle.get<Any?>(it) }))
-        assertEquals(5, restored.uiState.value.selectedDay)
-        assertEquals(RoomId("demo-a102"), restored.uiState.value.selectedRoom)
-        assertEquals(AppDestination.MAP, restored.uiState.value.destination)
-    }
-
-    @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
-
-    @Test
-    fun newAppStartsAtLoginWithHomeAsDefaultTab() {
-        val viewModel = AppViewModel(SavedStateHandle())
-        assertNull(viewModel.uiState.value.demoSession)
-        assertEquals(AppDestination.HOME, viewModel.uiState.value.destination)
-        assertEquals("", viewModel.uiState.value.rut)
-        assertEquals("", viewModel.uiState.value.password)
-    }
-
-    @Test
-    fun invalidEntryKeepsLoginAndDoesNotSaveSession() {
-        val handle = SavedStateHandle()
-        val viewModel = AppViewModel(handle)
-        viewModel.onRutChanged("12345678-9")
-        assertEquals(DemoEntryResult.MissingFields, viewModel.enterDemo())
-        assertNull(viewModel.uiState.value.demoSession)
-        assertFalse(handle.contains("demoCourse"))
-    }
-
-    @Test
-    fun successfulEntryExposesDemoCourseAndClearsPassword() {
-        val handle = SavedStateHandle()
-        val viewModel = AppViewModel(handle)
-        viewModel.onRutChanged("12345678-9")
-        viewModel.onPasswordChanged("demo")
-        val result = viewModel.enterDemo() as DemoEntryResult.Entered
-        assertEquals(result.session, viewModel.uiState.value.demoSession)
-        assertEquals("3° Medio A", viewModel.uiState.value.demoSession?.course)
-        assertEquals("", viewModel.uiState.value.password)
-        assertEquals("3° Medio A", handle.get<String>("demoCourse"))
-    }
-
-    @Test
-    fun editingFieldsPublishesStateWithoutSavingPassword() {
-        val handle = SavedStateHandle()
-        val viewModel = AppViewModel(handle)
-        viewModel.onRutChanged("12345678-9")
-        viewModel.onPasswordChanged("demo")
-        assertEquals("12345678-9", viewModel.uiState.value.rut)
-        assertEquals("demo", viewModel.uiState.value.password)
-        assertEquals(setOf("rut"), handle.keys())
-    }
-
-    @Test
-    fun everyTabCanBeSelectedAndSaved() {
-        val handle = SavedStateHandle()
-        val viewModel = AppViewModel(handle)
-        for (destination in AppDestination.entries) {
-            viewModel.selectDestination(destination)
-            assertEquals(destination, viewModel.uiState.value.destination)
-            assertEquals(destination.name, handle.get<String>("destination"))
+        AppDestination.entries.forEach {
+            vm.selectDestination(it)
+            assertEquals(it, restore(handle).uiState.value.destination)
         }
     }
-
-    @Test
-    fun savedStateRestoresSessionRutAndSelectedTab() {
+    @Test fun restoresSessionDayAndRoomAndFilters() {
         val handle = SavedStateHandle()
-        val original = AppViewModel(handle)
-        original.onRutChanged("12345678-9")
-        original.onPasswordChanged("demo")
-        original.enterDemo()
-        original.selectDestination(AppDestination.SCHEDULE)
-
-        val restoredHandle = SavedStateHandle(handle.keys().associateWith { handle.get<Any?>(it) })
-        val restored = AppViewModel(restoredHandle)
-        assertEquals(original.uiState.value, restored.uiState.value)
+        val vm = AppViewModel(handle)
+        vm.enterDemo()
+        vm.selectDay(5)
+        vm.openRoom(RoomId("demo-a102"))
+        vm.selectCategory("Académico")
+        vm.selectOrder(AnnouncementOrder.OLDEST)
+        vm.selectTheme(ThemeMode.DARK)
+        assertEquals(vm.uiState.value, restore(handle).uiState.value)
     }
-
-    @Test
-    fun loginDraftRestoresRutButDoesNotPersistPassword() {
+    @Test fun restoresDetailAndClosesItWithoutDroppingFilters() {
         val handle = SavedStateHandle()
-        val original = AppViewModel(handle)
-        original.onRutChanged("12345678-9")
-        original.onPasswordChanged("demo")
-
-        val restoredHandle = SavedStateHandle(handle.keys().associateWith { handle.get<Any?>(it) })
-        val restored = AppViewModel(restoredHandle)
-        assertEquals("12345678-9", restored.uiState.value.rut)
-        assertEquals("", restored.uiState.value.password)
-        assertNull(restored.uiState.value.demoSession)
+        val vm = AppViewModel(handle)
+        vm.selectCategory("Biblioteca")
+        vm.openAnnouncement("demo-library")
+        val restored = restore(handle)
+        assertEquals("demo-library", restored.uiState.value.announcementId)
+        restored.closeAnnouncement()
+        assertNull(restored.uiState.value.announcementId)
+        assertEquals("Biblioteca", restored.uiState.value.announcementCategory)
     }
-
-    @Test
-    fun unknownSavedDestinationFallsBackToHome() {
-        val viewModel = AppViewModel(SavedStateHandle(mapOf("destination" to "removed-tab")))
-        assertEquals(AppDestination.HOME, viewModel.uiState.value.destination)
+    @Test fun logoutClearsAllSessionStateAndPreservesAppearance() {
+        val handle = SavedStateHandle()
+        val vm = AppViewModel(handle)
+        vm.onRutChanged("12345678-5")
+        vm.enterDemo()
+        vm.selectDay(5)
+        vm.openRoom(RoomId("demo-a101"))
+        vm.openAnnouncement("demo-library")
+        vm.selectTheme(ThemeMode.DARK)
+        vm.logout()
+        assertNull(vm.uiState.value.demoSession)
+        assertEquals("", vm.uiState.value.rut)
+        assertNull(vm.uiState.value.selectedRoom)
+        assertNull(vm.uiState.value.announcementId)
+        assertEquals(AppDestination.HOME, vm.uiState.value.destination)
+        assertEquals(setOf("themeMode"), handle.keys())
+        assertEquals(ThemeMode.DARK, restore(handle).uiState.value.themeMode)
+        vm.enterDemo()
+        assertEquals(AppDestination.HOME, vm.uiState.value.destination)
+    }
+    @Test fun corruptedSavedValuesFallBackToSafeDefaults() {
+        val vm = AppViewModel(SavedStateHandle(mapOf("destination" to "removed", "selectedDay" to 99,
+            "announcementOrder" to "removed", "themeMode" to "removed")))
+        assertEquals(AppDestination.HOME, vm.uiState.value.destination)
+        assertTrue(vm.uiState.value.selectedDay in 1..7)
+        assertEquals(AnnouncementOrder.NEWEST, vm.uiState.value.announcementOrder)
+        assertEquals(ThemeMode.SYSTEM, vm.uiState.value.themeMode)
+    }
+    @Test fun savedThemeIsNotOverwrittenByInitialPreferenceRead() {
+        val vm = AppViewModel(SavedStateHandle(mapOf("themeMode" to "DARK")))
+        vm.initializeTheme(ThemeMode.LIGHT)
+        assertEquals(ThemeMode.DARK, vm.uiState.value.themeMode)
+    }
+    @Test fun demoDoesNotWriteCredentialsToSavedState() {
+        val handle = SavedStateHandle()
+        AppViewModel(handle).enterDemo()
+        assertFalse(handle.keys().any { it.contains("password", true) || it.contains("token", true) || it == "rut" })
     }
 }

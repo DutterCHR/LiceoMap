@@ -8,6 +8,6 @@ import java.util.TimeZone
 val SchoolDays = listOf("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo")
 
 fun schoolDate(millis: Long): String =
-    SimpleDateFormat("EEE d 'de' MMM", Locale.forLanguageTag("es-CL")).apply {
+    SimpleDateFormat("EEE d 'de' MMM yyyy", Locale.forLanguageTag("es-CL")).apply {
         timeZone = TimeZone.getTimeZone("America/Santiago")
     }.format(Date(millis))
