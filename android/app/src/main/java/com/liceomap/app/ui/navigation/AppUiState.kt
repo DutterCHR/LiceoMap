@@ -13,4 +13,5 @@ data class AppUiState(
     val announcementCategory: String? = null,
     val announcementOrder: AnnouncementOrder = AnnouncementOrder.NEWEST,
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
+    val backStack: List<AppRoute> = emptyList(),
 )

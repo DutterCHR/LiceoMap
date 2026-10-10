@@ -23,7 +23,7 @@ fun ScheduleScreen(
     onRoomSelected: (RoomId) -> Unit,
     onRetry: () -> Unit,
 ) {
-    LazyColumn(contentPadding = PaddingValues(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    LazyColumn(modifier = Modifier.testTag("schedule-list"), contentPadding = PaddingValues(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         item {
             Text("Tu semana", style = MaterialTheme.typography.headlineLarge)
             Text(course, style = MaterialTheme.typography.titleMedium)

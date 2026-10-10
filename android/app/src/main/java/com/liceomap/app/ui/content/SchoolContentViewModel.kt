@@ -23,6 +23,12 @@ class SchoolContentViewModel(
     val uiState = mutableState.asStateFlow()
     private var loadJob: Job? = null
 
+    fun clear() {
+        loadJob?.cancel()
+        loadJob = null
+        mutableState.value = SchoolContentState()
+    }
+
     fun load(course: String) {
         loadJob?.cancel()
         mutableState.value = SchoolContentState()
@@ -31,6 +37,7 @@ class SchoolContentViewModel(
                 launch {
                     try {
                         val data = schedules.loadSchedule(course)
+                        require(data.course == course) { "Schedule belongs to another course" }
                         mutableState.update { it.copy(schedule = LoadState.Ready(data)) }
                     } catch (cancelled: CancellationException) { throw cancelled
                     } catch (_: Exception) {
@@ -39,7 +46,9 @@ class SchoolContentViewModel(
                 }
                 launch {
                     try {
-                        val data = announcements.loadAnnouncements().sortedWith(
+                        val items = announcements.loadAnnouncements()
+                        require(items.map { it.id }.distinct().size == items.size) { "Duplicate announcement identities" }
+                        val data = items.sortedWith(
                             compareByDescending<Announcement> { it.publishedAt }.thenBy { it.id }
                         )
                         mutableState.update { it.copy(announcements = LoadState.Ready(data)) }

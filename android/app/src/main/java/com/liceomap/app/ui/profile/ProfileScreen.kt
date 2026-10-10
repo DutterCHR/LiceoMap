@@ -15,7 +15,7 @@ import com.liceomap.app.ui.theme.ThemeMode
 @Composable
 fun ProfileScreen(session: DemoSession, mode: ThemeMode, version: String, onThemeChanged: (ThemeMode) -> Unit, onLogout: () -> Unit) {
     var confirmLogout by rememberSaveable { mutableStateOf(false) }
-    LazyColumn(contentPadding = PaddingValues(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    LazyColumn(modifier = Modifier.testTag("profile-list"), contentPadding = PaddingValues(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         item { Text("Tu espacio", style = MaterialTheme.typography.headlineLarge) }
         item {
             SchoolCard {

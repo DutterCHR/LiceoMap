@@ -10,6 +10,44 @@ import org.junit.Rule
 import org.junit.Test
 
 class AppViewModelTest {
+    @Test fun fullScheduleRoomPathCanGoBackAfterProcessStateRestoration() {
+        val handle = SavedStateHandle()
+        val vm = AppViewModel(handle)
+        vm.enterDemo()
+        vm.selectDestination(AppDestination.SCHEDULE)
+        vm.selectDay(3)
+        vm.openRoom(RoomId("demo-a102"))
+        val restored = restore(handle)
+        assertTrue(restored.goBack())
+        assertEquals(AppDestination.SCHEDULE, restored.uiState.value.destination)
+        assertEquals(3, restored.uiState.value.selectedDay)
+        assertTrue(restored.goBack())
+        assertEquals(AppDestination.HOME, restored.uiState.value.destination)
+        assertFalse(restored.goBack())
+    }
+    @Test fun homeAnnouncementDetailReturnsThroughListAndKeepsFilters() {
+        val vm = AppViewModel(SavedStateHandle())
+        vm.enterDemo()
+        vm.selectCategory("Biblioteca")
+        vm.openAnnouncement("demo-library")
+        assertTrue(vm.goBack())
+        assertEquals(AppDestination.ANNOUNCEMENTS, vm.uiState.value.destination)
+        assertNull(vm.uiState.value.announcementId)
+        assertEquals("Biblioteca", vm.uiState.value.announcementCategory)
+        assertTrue(vm.goBack())
+        assertEquals(AppDestination.HOME, vm.uiState.value.destination)
+    }
+    @Test fun selectingMainTabReplacesChildHistoryAndClearsRoomSelection() {
+        val vm = AppViewModel(SavedStateHandle())
+        vm.enterDemo()
+        vm.selectDestination(AppDestination.SCHEDULE)
+        vm.openRoom(RoomId("demo-a101"))
+        vm.selectDestination(AppDestination.PROFILE)
+        assertNull(vm.uiState.value.selectedRoom)
+        assertTrue(vm.goBack())
+        assertEquals(AppDestination.HOME, vm.uiState.value.destination)
+        assertFalse(vm.goBack())
+    }
     @get:Rule val instantTaskExecutorRule = InstantTaskExecutorRule()
     private fun restore(handle: SavedStateHandle) = AppViewModel(SavedStateHandle(handle.keys().associateWith { handle.get<Any?>(it) }))
 

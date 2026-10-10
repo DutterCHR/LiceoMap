@@ -8,6 +8,29 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class SchoolContentViewModelTest {
+    @Test fun clearingSessionCancelsPendingContentAndDoesNotExposeLateData() {
+        val pending = CompletableDeferred<Schedule>()
+        val repo = object : ScheduleRepository {
+            override suspend fun loadSchedule(course: String): Schedule = pending.await()
+        }
+        val vm = SchoolContentViewModel(repo, DemoAnnouncementsRepository(), Dispatchers.Unconfined)
+        vm.load("A")
+        vm.clear()
+        pending.complete(Schedule("A", emptyList()))
+        assertEquals(SchoolContentState(), vm.uiState.value)
+    }
+    @Test fun wrongCourseAndDuplicateAnnouncementIdsBecomeLoadErrors() {
+        val schedules = object : ScheduleRepository {
+            override suspend fun loadSchedule(course: String) = Schedule("Other", emptyList())
+        }
+        val news = object : AnnouncementsRepository {
+            override suspend fun loadAnnouncements() = listOf(Announcement("a", "A", "A"), Announcement("a", "B", "B"))
+        }
+        val vm = SchoolContentViewModel(schedules, news, Dispatchers.Unconfined)
+        vm.load("A")
+        assertTrue(vm.uiState.value.schedule is LoadState.Error)
+        assertTrue(vm.uiState.value.announcements is LoadState.Error)
+    }
     @Test fun startsLoadingThenLoadsSharedDemoSources() {
         val vm = SchoolContentViewModel(dispatcher = Dispatchers.Unconfined)
         assertEquals(LoadState.Loading, vm.uiState.value.schedule)

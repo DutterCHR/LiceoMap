@@ -32,7 +32,7 @@ fun AnnouncementsScreen(
     onOpen: (String) -> Unit,
     onRetry: () -> Unit,
 ) {
-    LazyColumn(contentPadding = PaddingValues(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    LazyColumn(modifier = Modifier.testTag("announcements-list"), contentPadding = PaddingValues(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         item { Text("Comunidad al día", style = MaterialTheme.typography.headlineLarge) }
         item { DemoNotice() }
         when (announcements) {

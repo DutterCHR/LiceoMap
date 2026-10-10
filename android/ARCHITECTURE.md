@@ -1,144 +1,148 @@
-# LiceoMap v0.2 — M01
+# LiceoMap v0.2 — M01 a M06
 
-El módulo conserva Kotlin, Jetpack Compose y Material 3. `MainActivity` solo
-crea la composición y mantiene el `MaterialTheme` que utilizaba el prototipo.
+Proyecto Android en Kotlin, Jetpack Compose, Material 3 y MVVM; minSdk 24.
+Versión 0.2.0. Sin nuevas dependencias en M02–M06. Se actualizan únicamente
+Espresso a 3.7.0 y la extensión JUnit Android a 1.3.0 para ejecutar las pruebas
+en Android 17; Espresso 3.5.1 usaba un método de InputManager eliminado.
+La corrección está documentada en las
+[notas oficiales de AndroidX Test](https://developer.android.com/jetpack/androidx/releases/test#espresso-3.7.0).
 
-## Estructura
+## Responsabilidades
 
-Dentro de `app/src/main/java/com/liceomap/app/`:
+- `MainActivity`: crea la composición.
+- `AppNavigation`: observa los ViewModels con `collectAsStateWithLifecycle`,
+  aplica la apariencia y presenta login o el contenido de la sesión.
+- `AppViewModel`: sesión demo, rutas tipadas, historial, día, sala, filtros de
+  anuncios y apariencia. `SavedStateHandle` restaura el estado de la tarea.
+- `SchoolContentViewModel`: una carga compartida para Home, Horarios y Anuncios.
+  Los dos repositorios son inyectables y sus errores independientes.
+  `LoadState` representa carga, contenido y error; listas vacías son contenido
+  válido. Reintentar cancela la carga anterior; logout cancela y limpia los datos.
+- `ScheduleRepository` y `AnnouncementsRepository`: contratos suspendidos de M01,
+  implementados por fuentes locales de demostración.
+- `AuthenticationRepository` y `MapRepository`: fronteras para integraciones futuras.
+- Pantallas: reciben estado y callbacks, sin cargar datos por su cuenta.
+- `SchoolCard`, `DemoNotice`, `StatusCard`, `AnnouncementCard`: componentes compartidos.
 
-```text
-MainActivity.kt
-model/
-  Authentication.kt
-  DemoSession.kt
-  SchoolContent.kt
-data/
-  demo/
-    DemoData.kt
-    DemoEntry.kt
-  repository/
-    AuthenticationRepository.kt
-    MapRepository.kt
-    ScheduleRepository.kt
-    AnnouncementsRepository.kt
-ui/
-  navigation/
-    AppNavigation.kt
-    MainScreen.kt
-    AppDestination.kt
-    AppUiState.kt
-    AppViewModel.kt
-  login/LoginScreen.kt
-  map/
-    MapScreen.kt
-    MapViewport.kt
-  schedule/ScheduleScreen.kt
-  announcements/AnnouncementsScreen.kt
-  theme/               Recursos de tema existentes, conservados.
-```
+## Datos y tiempo
 
-`AppNavigation` observa `AppViewModel.uiState` mediante
-`collectAsStateWithLifecycle`. Las pantallas reciben valores y callbacks. El
-ViewModel valida el ingreso demo y conserva la sesión local y la pestaña activa.
-Las tres pestañas tienen destinos tipados; la navegación y su comportamiento al
-presionar Atrás permanecen centralizados, sin agregar una biblioteca de navegación.
+Los horarios, salas, curso y anuncios locales son ficticios y se identifican en
+las pantallas. El estudiante demo no tiene nombre: Home usa un saludo genérico.
+Si `DemoSession.studentName` está disponible, Home y Perfil lo muestran.
 
-Horarios y anuncios siguen siendo las vistas informativas del prototipo: aún no
-hay contenido que cargar ni lógica que justifique ViewModels adicionales.
+`Lesson.dayOfWeek` usa ISO: lunes=1 a domingo=7. Las horas deben ser HH:mm;
+inicio anterior al término; un horario no permite clases superpuestas.
+El repositorio debe entregar el curso solicitado. Los anuncios requieren
+identificadores únicos, título y cuerpo no vacíos y una fecha válida.
 
-## Estado
+`ScheduleClock.summary(schedule, nowMillis)` es lógica pura con un instante
+inyectable y `America/Santiago` explícita. Usa Calendar para funcionar desde API
+24 sin agregar desugaring ni dependencias. Inicio inclusivo, término exclusivo;
+busca la próxima ocurrencia durante los siete días siguientes, incluso fines
+de semana. Calendar conserva la hora local al cruzar cambios de horario de verano.
+Home y Horarios reciben el mismo instante y horario.
 
-- El ViewModel sobrevive a la recreación de la actividad. `SavedStateHandle`
-  permite restaurar RUT, curso de demostración y pestaña tras la muerte del proceso
-  cuando Android conserva el estado de la tarea.
-- La contraseña solo vive en memoria: sobrevive a los cambios de configuración,
-  se borra después del ingreso y no se escribe en el estado guardado. Después de
-  la muerte del proceso debe escribirse de nuevo si el usuario seguía en login.
-- El mapa utiliza `rememberSaveable` con un `Saver` para escala y coordenadas.
-  `SaveableStateHolder` conserva esos valores al cambiar de pestaña, incluso si
-  la actividad se recrea mientras otra pestaña está visible.
-- No hay persistencia de sesión permanente ni credenciales, tokens o backend.
+`rememberSchoolTime` actualiza el instante al volver a primer plano y cada 30 s
+mientras la actividad está STARTED. La indicación de clase actual puede cambiar
+hasta 30 s después de un límite horario.
 
-Esta separación sigue la documentación oficial de
-[estado guardado en ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-savedstate)
-y [estado guardado en Compose](https://developer.android.com/develop/ui/compose/state-saving).
+Los anuncios se ordenan inicialmente por fecha descendente e ID como desempate.
+La lista permite filtrar categoría y cambiar el orden; Home presenta los dos
+más recientes del mismo estado, independientemente del filtro de la lista.
+Las fechas se muestran en español con la zona de Santiago.
 
-## Demostración y futuras integraciones
+## Navegación y restauración
 
-`DemoEntry` acepta cualquier RUT y contraseña que no estén en blanco, igual que
-el prototipo. Devuelve exclusivamente `DemoSession`; nunca una identidad
-autenticada. El subtítulo del formulario y el mensaje de ingreso indican que es
-una demostración, manteniendo el diseño, dimensiones, estilos y controles.
+Cuatro destinos principales: Inicio, Mapa, Anuncios, Perfil.
+Horarios es un hijo de Inicio. El detalle es una ruta de Anuncios por ID.
 
-`DemoData` contiene el curso y la geometría normalizada del Canvas original. Se
-conservan los cuatro sectores, marcador, colores y límites de zoom (0.8 a 3).
-El recurso `assets/mapa.html` permanece intacto.
+- Login → Inicio: acceso demo sin credenciales.
+- Inicio → Horarios → Mapa(sala): Volver recorre Mapa → Horarios → Inicio.
+- Inicio → Anuncios → Detalle: Volver recorre Detalle → Anuncios → Inicio.
+- Un anuncio reciente de Home abre Detalle con la lista como ruta anterior.
+- Seleccionar una pestaña principal reemplaza el historial anterior; Atrás
+  vuelve a Inicio. Desde Inicio o Login se deja Atrás al sistema.
+- Botón Volver y BackHandler usan la misma transición del ViewModel.
+- Rutas e historial se guardan como strings y ArrayList de strings compatibles
+  con Bundle; no se guardan modelos ni clases Compose.
+- `SaveableStateHolder` conserva scroll por pantalla, separando lista y cada
+  detalle. El viewport conserva escala y posición con el Saver de M01.
+- El estado de pantallas se dispone al cerrar sesión; se cancelan las cargas.
+  El siguiente ingreso empieza en Home sin filtros ni selección de sala.
+- La restauración mediante SavedStateHandle depende de que Android conserve
+  el estado de la tarea; no es una sesión persistente entre cierres definitivos.
 
-Los contratos de `data/repository/` no tienen implementaciones:
+## Apariencia y sesión
 
-- `AuthenticationRepository.authenticate`: resultado autenticado o rechazado,
-  separado del acceso demo. Una integración real deberá tratar también errores
-  de comunicación y sustituir explícitamente el flujo demo.
-- `MapRepository.loadMap`: referencia a un recurso SVG, sin renderer definitivo.
-- `ScheduleRepository.loadSchedule`: horario del curso solicitado.
-- `AnnouncementsRepository.loadAnnouncements`: lista de comunicados.
+`LiceoMapTheme` ofrece modo automático, claro y oscuro. Todos los niveles de
+superficie Material 3 usan la paleta verde. Se comprueba contraste AA de los
+pares principales de texto. Las tarjetas animan discretamente cambios de tamaño.
+La actividad usa edge-to-edge y ajusta los iconos de las barras del sistema al
+tema elegido; Scaffold y el formulario respetan los insets y el teclado.
 
-Las operaciones son suspendidas para permitir futuras fuentes locales o remotas.
-Los fallos de carga/comunicación se comunicarán mediante excepciones y deberán
-traducirse a estados de carga/error en los ViewModels que incorporen esas fuentes.
-No se agregan clientes HTTP, inyección de dependencias ni repositorios ficticios.
+Solo la preferencia de tema se almacena en SharedPreferences. Las credenciales
+no se solicitan ni se almacenan. El RUT opcional del formulario institucional se
+valida localmente con módulo 11 y se borra al entrar en demo o cerrar sesión;
+la validación no acredita identidad. No existe backend, autenticación real
+ni servicio remoto. `DemoEntry` devuelve únicamente `DemoSession`.
+
+## Contrato del mapa SVG
+
+Los recursos existentes, incluido `app/src/main/assets/mapa.html`, se conservan.
+El Canvas de M01 continúa como esquema ficticio con zoom y desplazamiento.
+La selección de una sala muestra su nombre o un aviso de ID desconocido;
+el marcador del esquema no representa la ubicación de la sala seleccionada.
+No se crea el mapa definitivo ni se inventan coordenadas.
+
+- `RoomId.value`: ID estable compartido entre horario y mapa.
+- `RoomReference`: ID y etiqueta legible.
+- `DemoRooms`: catálogo exclusivamente demo; IDs `demo-a101`, `demo-a102`.
+- `Lesson.roomId`: identidad enviada por la acción Ver sala en mapa.
+- `MapScreen.selectedRoom`: destino que debe recibir el renderer futuro.
+- `SvgMap.assetPath`: asset del SVG que entregue el equipo.
+- `SvgRoomBinding(roomId, elementId)`: vínculo explícito con un elemento SVG.
+- `SvgMap.elementFor`: resuelve un vínculo o devuelve null; no asigna ubicación
+  por aproximación y rechaza IDs de sala duplicados.
+
+El integrante del mapa debe proporcionar el SVG, catálogo oficial, vínculos
+de IDs y renderer interactivo. Al integrarlo, conservar el tratamiento de sala
+desconocida y estado de carga/error. `MapRepository` está preparado, pero el
+Canvas demo aún no lo consume porque no hay un SVG oficial.
+
+## Integraciones pendientes
+
+Horario y anuncios oficiales mediante implementaciones de sus repositorios;
+nombre y curso real del estudiante; autenticación institucional que use
+`AuthenticationRepository`; mapa SVG y catálogo oficial de salas.
+No se simulan estas integraciones ni se añaden servicios de pago.
 
 ## Verificación
 
-Desde `android/`, con JDK 25 y el SDK configurado para el proyecto:
+Comandos desde `android/`:
 
 ```powershell
 .\gradlew.bat assembleDebug
 .\gradlew.bat testDebugUnitTest
 .\gradlew.bat lintDebug
+.\gradlew.bat connectedDebugAndroidTest
 ```
 
-Las pruebas unitarias cubren campos en blanco, acceso exclusivamente demo,
-transiciones de sesión y navegación, restauración del estado, ausencia de
-contraseña en el estado guardado y límites/acumulación de los gestos del mapa.
+En este PC se usa el JDK 25 incluido en Android Studio y SDK D:\JS.
+La terminal del agente necesita JAVA_HOME y GRADLE_USER_HOME explícitos.
+Los ejecutores Gradle fallaban al interpretar la ruta acentuada del usuario:
+la opción temporal `-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=COMPAT`
+corrigió la ejecución. No se cambia la codificación UTF-8 del repositorio.
+Se usó `--offline --max-workers=2` con las dependencias ya disponibles.
+La primera ejecución instrumentada requirió descargar los componentes UTP de
+AGP y las actualizaciones de AndroidX Test; las posteriores se ejecutan offline.
+Se usa `--no-configuration-cache` para el comando instrumentado en este entorno.
 
-Pruebas agregadas en `app/src/test/java/com/liceomap/app/`:
+Referencias para el entorno:
+[configuración de Gradle](https://docs.gradle.org/current/userguide/build_environment.html)
+y [archivos de argumentos de Java](https://docs.oracle.com/en/java/javase/25/docs/specs/man/java.html).
 
-- `data/demo/DemoEntryTest.kt`: 4 pruebas.
-- `ui/navigation/AppViewModelTest.kt`: 8 pruebas.
-- `ui/map/MapViewportTest.kt`: 4 pruebas.
-
-La prueba de ejemplo existente permanece: total de 17 pruebas unitarias.
-
-## Informe del checkpoint
-
-Estado inicial verificado: Git limpio, rama `feature/integrar-android-kotlin`,
-commit `34f54f23afad57032c51242c8271807b44fce438`. Rama de trabajo creada:
-`feature/android-v0.2-base`.
-
-Archivos existentes modificados: `MainActivity.kt`, `app/build.gradle.kts` y
-`gradle/libs.versions.toml`. Se agregan este documento, los archivos de modelos,
-datos y pantallas enumerados arriba, y las tres clases de pruebas. Las nuevas
-dependencias son las integraciones de Lifecycle con Compose/ViewModel/estado
-guardado y `core-testing` exclusivamente para pruebas.
-
-Verificaciones ejecutadas con el JDK 25 de Android Studio y el SDK local:
-
-- `assembleDebug`: correcto.
-- `testDebugUnitTest`: 17 pruebas, sin fallos, errores ni pruebas omitidas.
-- `lintDebug`: correcto, 0 errores y 20 advertencias. Las advertencias corresponden
-  a versiones de dependencias, una etiqueta redundante en el manifiesto,
-  recursos existentes sin uso y la declaración existente de iconos fuera del
-  catálogo. No se actualizan dependencias ajenas a la migración ni se eliminan
-  recursos existentes. Gradle también avisa de la opción experimental existente
-  `android.overridePathCheck`.
-- Alcance: únicamente archivos dentro de `android/`; recursos, assets, tema y
-  manifiesto conservados.
-- `git diff --check`: sin problemas.
-
-No quedan errores de compilación, pruebas o lint. No había dispositivo ni
-emulador conectado: no se ejecutaron pruebas instrumentadas ni una comparación
-visual en dispositivo. La restauración se cubre mediante pruebas unitarias del
-ViewModel; la integración real con el ciclo de vida y la restauración del Canvas
-quedan pendientes de esa comprobación en dispositivo.
+Las pruebas cubren horarios y Santiago, validación de contenido, filtros y
+orden de anuncios, errores/cancelación/reintento, navegación, historial,
+sesión, restauración, RUT, contraste y viewport. Las pruebas Compose verifican
+flujos completos, recreación de actividad y estados vacíos/carga/error.
+El informe de resultados y cambios está en `MIGRATION_REPORT.md`.
