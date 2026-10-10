@@ -6,5 +6,5 @@ data class AppUiState(
     val rut: String = "",
     val password: String = "",
     val demoSession: DemoSession? = null,
-    val destination: AppDestination = AppDestination.MAP,
+    val destination: AppDestination = AppDestination.HOME,
 )

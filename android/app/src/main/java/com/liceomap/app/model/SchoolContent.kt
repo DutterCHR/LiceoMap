@@ -10,7 +10,10 @@ data class Lesson(
     val room: String,
 )
 
-data class Announcement(val id: String, val title: String, val body: String)
+data class Announcement(
+    val id: String, val title: String, val body: String,
+    val category: String = "General", val publishedAt: Long = 0L,
+)
 
 /** Asset reference for a future SVG renderer; no renderer is implemented in M01. */
 data class SvgMap(val assetPath: String)

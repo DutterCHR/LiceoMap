@@ -14,10 +14,10 @@ class AppViewModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Test
-    fun newAppStartsAtLoginWithMapAsDefaultTab() {
+    fun newAppStartsAtLoginWithHomeAsDefaultTab() {
         val viewModel = AppViewModel(SavedStateHandle())
         assertNull(viewModel.uiState.value.demoSession)
-        assertEquals(AppDestination.MAP, viewModel.uiState.value.destination)
+        assertEquals(AppDestination.HOME, viewModel.uiState.value.destination)
         assertEquals("", viewModel.uiState.value.rut)
         assertEquals("", viewModel.uiState.value.password)
     }
@@ -96,8 +96,8 @@ class AppViewModelTest {
     }
 
     @Test
-    fun unknownSavedDestinationFallsBackToMap() {
+    fun unknownSavedDestinationFallsBackToHome() {
         val viewModel = AppViewModel(SavedStateHandle(mapOf("destination" to "removed-tab")))
-        assertEquals(AppDestination.MAP, viewModel.uiState.value.destination)
+        assertEquals(AppDestination.HOME, viewModel.uiState.value.destination)
     }
 }

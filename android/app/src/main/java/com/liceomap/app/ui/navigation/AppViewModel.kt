@@ -16,7 +16,7 @@ class AppViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel()
             demoSession = savedStateHandle.get<String>("demoCourse")?.let(::DemoSession),
             destination = AppDestination.entries.firstOrNull {
                 it.name == savedStateHandle.get<String>("destination")
-            } ?: AppDestination.MAP,
+            } ?: AppDestination.HOME,
         )
     )
     val uiState = mutableUiState.asStateFlow()
@@ -36,7 +36,8 @@ class AppViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel()
         val result = DemoEntry.enter(state.rut, state.password)
         if (result is DemoEntryResult.Entered) {
             savedStateHandle["demoCourse"] = result.session.course
-            mutableUiState.update { it.copy(demoSession = result.session, password = "") }
+            savedStateHandle["destination"] = AppDestination.HOME.name
+            mutableUiState.update { it.copy(demoSession = result.session, password = "", destination = AppDestination.HOME) }
         }
         return result
     }
