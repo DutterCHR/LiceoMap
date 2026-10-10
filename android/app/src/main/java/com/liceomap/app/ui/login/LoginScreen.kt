@@ -23,7 +23,7 @@ fun LoginScreen(
     onPasswordChanged: (String) -> Unit,
     onEnter: () -> Unit,
 ) {
-    val azulLiceo = Color(0xFF0A2540)
+    val azulLiceo = MaterialTheme.colorScheme.primary
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -34,7 +34,7 @@ fun LoginScreen(
                 .fillMaxWidth(0.9f)
                 .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
             shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
         ) {
             Column(
                 modifier = Modifier.padding(28.dp),
@@ -49,7 +49,7 @@ fun LoginScreen(
                 Text(
                     text = "Ingresa a la demostración",
                     fontSize = 14.sp,
-                    color = Color.Gray,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(bottom = 24.dp)
                 )
 

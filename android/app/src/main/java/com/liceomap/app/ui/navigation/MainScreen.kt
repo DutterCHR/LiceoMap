@@ -22,17 +22,16 @@ fun MainScreen(
     onDestinationSelected: (AppDestination) -> Unit,
     content: @Composable () -> Unit,
 ) {
-    val azulLiceo = Color(0xFF0A2540)
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("LiceoMap - $course", color = Color.White, fontSize = 18.sp) },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = azulLiceo)
+                title = { Text("LiceoMap · $course", style = MaterialTheme.typography.titleLarge) },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
             )
         },
         bottomBar = {
-            NavigationBar(containerColor = Color.White) {
+            NavigationBar {
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.LocationOn, contentDescription = "Mapa") },
                     label = { Text("Mapa") },
