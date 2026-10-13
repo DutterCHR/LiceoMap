@@ -2,6 +2,7 @@ package com.liceomap.app.ui.home
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,7 +28,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -44,12 +44,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.liceomap.app.domain.LessonOccurrence
 import com.liceomap.app.domain.ScheduleClock
 import com.liceomap.app.model.Announcement
 import com.liceomap.app.model.DemoSession
 import com.liceomap.app.model.LoadState
-import com.liceomap.app.ui.components.DemoNotice
 import com.liceomap.app.ui.components.StatusCard
 import com.liceomap.app.ui.components.schoolDate
 import com.liceomap.app.ui.content.SchoolContentState
@@ -57,6 +57,7 @@ import com.liceomap.app.ui.navigation.AppDestination
 
 private val Petroleum = Color(0xFF285659)
 private val Accent = Color(0xFF87ABA6)
+private val AccentSoft = Color(0xFFD7E9E6)
 private val LightBackground = Color(0xFFF4F7F6)
 private val MainText = Color(0xFF1D3032)
 private val HomeShape = RoundedCornerShape(8.dp)
@@ -72,11 +73,10 @@ fun HomeScreen(
 ) {
     LazyColumn(
         modifier = Modifier.background(MaterialTheme.colorScheme.background),
-        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp),
+        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 14.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         item { HomeHeader(session) }
-        item { DemoNotice() }
         item {
             when (val schedule = content.schedule) {
                 LoadState.Loading -> StatusCard("Preparando tu día", "Cargando el horario...", loading = true)
@@ -99,7 +99,7 @@ fun HomeScreen(
         }
         item {
             SectionTitle("Accesos rápidos")
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(6.dp))
             QuickActions(onNavigate)
         }
         item {
@@ -109,7 +109,12 @@ fun HomeScreen(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 SectionTitle("Novedades")
-                TextButton(onClick = { onNavigate(AppDestination.ANNOUNCEMENTS) }) { Text("Ver todos") }
+                TextButton(
+                    onClick = { onNavigate(AppDestination.ANNOUNCEMENTS) },
+                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp),
+                ) {
+                    Text("Ver todos", style = MaterialTheme.typography.labelLarge)
+                }
             }
         }
         when (val announcements = content.announcements) {
@@ -141,23 +146,19 @@ fun HomeScreen(
 @Composable
 private fun HomeHeader(session: DemoSession) {
     val greeting = session.studentName?.let { "Hola, $it" } ?: "Tu día en LiceoMap"
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(
-            "LiceoMap",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.SemiBold,
-        )
+    Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
         Text(
             greeting,
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.headlineSmall.copy(fontSize = 21.sp, lineHeight = 27.sp),
             color = MaterialTheme.colorScheme.onBackground,
             fontWeight = FontWeight.SemiBold,
         )
         Text(
-            "Curso ${session.course}",
+            "Curso ${session.course} · Demostración · Datos ficticios",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
@@ -178,8 +179,8 @@ private fun HeroClassCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
     ) {
         Column(
-            modifier = Modifier.padding(18.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.padding(horizontal = 18.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -188,28 +189,29 @@ private fun HeroClassCard(
             ) {
                 Text(
                     if (isCurrent) "Clase actual" else "Próxima clase",
-                    style = MaterialTheme.typography.labelLarge,
+                    style = MaterialTheme.typography.labelLarge.copy(fontSize = 13.sp),
                     color = Accent,
                     fontWeight = FontWeight.SemiBold,
                 )
                 Text(
                     "${occurrence.lesson.startTime} - ${occurrence.lesson.endTime}",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = Color.White.copy(alpha = 0.86f),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = Color.White.copy(alpha = 0.9f),
+                    fontWeight = FontWeight.SemiBold,
                 )
             }
             Text(
                 occurrence.lesson.subject,
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.headlineSmall.copy(fontSize = 23.sp, lineHeight = 29.sp),
                 fontWeight = FontWeight.SemiBold,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
             )
-            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
                 Text(
                     schoolDate(occurrence.startMillis),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.White.copy(alpha = 0.86f),
+                    color = Color.White.copy(alpha = 0.88f),
                 )
                 Text(
                     occurrence.lesson.room,
@@ -217,28 +219,33 @@ private fun HeroClassCard(
                     fontWeight = FontWeight.Medium,
                 )
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
                 Button(
                     onClick = onSchedule,
+                    modifier = Modifier.weight(1f),
                     shape = HomeShape,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.White,
                         contentColor = Petroleum,
                     ),
-                    contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
+                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 10.dp),
                 ) {
                     Icon(Icons.Default.Schedule, contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(Modifier.width(8.dp))
                     Text("Ver horario")
                 }
-                FilledTonalButton(
+                Button(
                     onClick = onRoom,
+                    modifier = Modifier.weight(1f),
                     shape = HomeShape,
-                    colors = ButtonDefaults.filledTonalButtonColors(
-                        containerColor = Accent,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = AccentSoft,
                         contentColor = MainText,
                     ),
-                    contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
+                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 10.dp),
                 ) {
                     Icon(Icons.Default.LocationOn, contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(Modifier.width(8.dp))
@@ -253,7 +260,7 @@ private fun HeroClassCard(
 private fun SectionTitle(text: String) {
     Text(
         text,
-        style = MaterialTheme.typography.titleMedium,
+        style = MaterialTheme.typography.titleMedium.copy(fontSize = 17.sp),
         color = MaterialTheme.colorScheme.onBackground,
         fontWeight = FontWeight.SemiBold,
     )
@@ -261,7 +268,7 @@ private fun SectionTitle(text: String) {
 
 @Composable
 private fun QuickActions(onNavigate: (AppDestination) -> Unit) {
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(9.dp)) {
         QuickAction(
             label = "Horarios",
             icon = Icons.Default.Schedule,
@@ -304,30 +311,34 @@ private fun QuickAction(
             .clickable(onClick = onClick),
         shape = HomeShape,
         color = background,
-        tonalElevation = 1.dp,
-        shadowElevation = 0.dp,
+        tonalElevation = 0.dp,
+        shadowElevation = 1.dp,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f)),
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 14.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(88.dp)
+                .padding(horizontal = 8.dp, vertical = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Box(
                 modifier = Modifier
-                    .size(34.dp)
+                    .size(32.dp)
                     .background(MaterialTheme.colorScheme.primaryContainer, CircleShape),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     icon,
                     contentDescription = null,
-                    modifier = Modifier.size(19.dp),
+                    modifier = Modifier.size(18.dp),
                     tint = MaterialTheme.colorScheme.primary,
                 )
             }
             Text(
                 label,
-                style = MaterialTheme.typography.labelLarge,
+                style = MaterialTheme.typography.labelLarge.copy(fontSize = 13.sp),
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -353,31 +364,46 @@ private fun CompactAnnouncementCard(announcement: Announcement, onOpen: () -> Un
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp),
+        Row(
+            modifier = Modifier.padding(14.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text(
-                "${announcement.category} - ${schoolDate(announcement.publishedAt)}",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.SemiBold,
+            Box(
+                modifier = Modifier
+                    .width(3.dp)
+                    .height(76.dp)
+                    .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(2.dp)),
             )
-            Text(
-                announcement.title,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.SemiBold,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Text(
-                announcement.body,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-            )
+            Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                Text(
+                    announcement.category,
+                    style = MaterialTheme.typography.labelLarge.copy(fontSize = 12.sp),
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(
+                    announcement.title,
+                    style = MaterialTheme.typography.titleMedium.copy(fontSize = 17.sp, lineHeight = 22.sp),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(
+                    announcement.body,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(
+                    schoolDate(announcement.publishedAt),
+                    style = MaterialTheme.typography.labelLarge.copy(fontSize = 12.sp),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
     }
 }
