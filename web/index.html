@@ -3,88 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LiceoMap | Plataforma de Orientación Escolar</title>
-    
-    <!-- Estilos -->
-    <link rel="stylesheet" href="Style.css">
-    
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <!-- Feather Icons -->
-    <script src="https://unpkg.com/feather-icons"></script>
+    <title>LiceoMap - Sistema de Gestión Escolar y Orientación Espacial</title>
+    <meta name="description" content="Plataforma de orientación espacial, horarios y comunicación para la comunidad del Liceo Antonio Varas de la Barra.">
+    <meta name="theme-color" content="#0f172a">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Dependencias externas fijadas a versiones concretas -->
+    <script defer src="https://unpkg.com/feather-icons@4.29.2/dist/feather.min.js" integrity="sha384-qEqAs1VsN9WH2myXDbiP2wGGIttL9bMRZBKCl54ZnzpDlVqbYANP9vMaoT/wvQcf" crossorigin="anonymous"></script>
+    <!-- Leaflet CSS for Interactive Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+    <script defer src="app.js"></script>
 </head>
 <body>
 
-    <!-- Malla ambiental de fondo -->
-    <div class="page-mesh-bg"></div>
+    <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
 
-    <!-- 1. LOADER CINEMÁTICO DE ENTRADA -->
-    <div class="loader">
-        <div class="loader-content">
-            <img src="image-removebg-preview.png" alt="Logo AVB" class="loader-logo">
-            <div class="mask-text">
-                <div class="loader-text">LiceoMap.</div>
-            </div>
-            <p class="loader-sub">Arica • Chile</p>
+    <!-- PRELOADER SIMPLE Y AGRADABLE -->
+    <div id="app-preloader" class="preloader">
+        <div class="preloader-content">
+            <img src="logo_lm_ligero-removebg-preview.png" alt="LiceoMap Logo" class="preloader-logo">
+            <div class="preloader-spinner"></div>
+            <span class="preloader-text">Cargando LiceoMap...</span>
         </div>
     </div>
 
-    <!-- 2. NAVEGACIÓN PREMIUM -->
-    <nav class="navbar">
+    <!-- Fondo con Malla Gradiente Sutil -->
+    <div class="page-mesh-bg"></div>
+
+    <!-- =========================================
+       NAVEGACIÓN (GLASSMORPHISM)
+    ========================================= -->
+    <nav class="navbar" aria-label="Navegación principal">
         <a href="#" class="nav-logo-wrapper">
-            <img src="image-removebg-preview.png" alt="Logo Liceo AVB" class="nav-logo-img">
-            <span class="nav-logo">LiceoMap<span class="dot">.</span></span>
+            <img src="logo_lm_ligero-removebg-preview.png" alt="LiceoMap Logo" class="nav-logo-img">
+            <span class="nav-logo">Liceo<span class="dot">Map.</span></span>
         </a>
 
-        <!-- Selector de Liceo (Visión de Expansión) -->
         <div class="liceo-selector-badge">
             <i data-feather="map-pin"></i>
-            <span>Establecimiento:</span>
-            <select id="liceoSelect" class="liceo-dropdown">
-                <option value="b4" selected>Liceo B4 Antonio Varas (Arica)</option>
-                <option value="disabled" disabled>──  Proximantente... ──</option>
+            <label for="liceo-select">Establecimiento:</label>
+            <select id="liceo-select" class="liceo-dropdown">
+                <option>Liceo B4 Antonio Varas (Arica)</option>
             </select>
         </div>
 
-        <div class="nav-links">
+        <!-- Botón de Hamburguesa para Móvil -->
+        <button class="hamburger-btn" id="hamburger-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-links-menu">
+            <i data-feather="menu"></i>
+        </button>
+
+        <div class="nav-links" id="nav-links-menu">
             <a href="#concepto">Concepto</a>
             <a href="#servicios">Módulos App</a>
             <a href="#mapa-container">Mapa Interactivo</a>
             <a href="#anuncios">Anuncios</a>
-            <a href="#app-preview" class="btn-nav-primary">Probar App</a>
+            <a href="#admin-modal" class="btn-nav-primary btn-nav-admin" id="btn-open-admin">
+                <i data-feather="shield" aria-hidden="true"></i> Inicio Sesión Admin
+            </a>
         </div>
     </nav>
-
-    <!-- 3. HERO SECTION CINEMÁTICO -->
-    <header class="hero">
-        <img src="image_fddc2f.jpg" alt="Entrada Principal Liceo B4" class="hero-bg-image">
+    <!-- =========================================
+       HERO SECTION
+    ========================================= -->
+    <main id="main-content">
+    <header class="hero" id="concepto" aria-labelledby="hero-title">
+        <img src="image_fddc2f.png" alt="" width="1536" height="1024" fetchpriority="high" decoding="async" class="hero-bg-image">
         <div class="hero-overlay"></div>
-        
+
         <div class="hero-content">
-            <div class="hero-status-bar">
+            <div class="hero-status-bar reveal-on-scroll">
                 <div class="status-indicator">
                     <span class="status-dot"></span>
                     <span>Proyecto Piloto Oficial • Liceo B4 Arica</span>
                 </div>
-                <span><i data-feather="shield"></i> Sistema de Gestión Escolar</span>
+                <div class="status-indicator">
+                    <i data-feather="shield"></i>
+                    <span>Sistema de Gestión Escolar</span>
+                </div>
             </div>
-            
-            <div class="hero-title-group">
-                <div class="mask-text"><h1 class="hero-title">EXPLORA.</h1></div>
-                <div class="mask-text"><h1 class="hero-title accent-text">UBÍCATE.</h1></div>
-                <div class="mask-text"><h1 class="hero-title">CONÉCTATE.</h1></div>
-            </div>
-            
-            <p class="hero-subtitle">
+
+            <h1 id="hero-title" class="hero-title-group reveal-on-scroll reveal-delay-1">
+                <span class="hero-title mask-text">EXPLORA.</span>
+                <span class="hero-title mask-text accent-text">UBÍCATE.</span>
+                <span class="hero-title mask-text">CONÉCTATE.</span>
+            </h1>
+
+            <p class="hero-subtitle reveal-on-scroll reveal-delay-2">
                 Plataforma digital de orientación espacial, consulta de horarios por RUT y comunicación directa en tiempo real para la comunidad del Liceo Antonio Varas de la Barra.
             </p>
 
-            <div class="hero-actions">
+            <div class="hero-actions reveal-on-scroll reveal-delay-3">
                 <a href="#mapa-container" class="btn-hero-primary">
                     <i data-feather="navigation"></i> Abrir Mapa del Liceo B4
                 </a>
                 <a href="#servicios" class="btn-hero-secondary">
                     <i data-feather="smartphone"></i> Conocer la App
+                </a>
+                <a href="#app-preview" class="btn-hero-secondary btn-hero-download">
+                    <i data-feather="download"></i> Probar App
                 </a>
             </div>
         </div>
@@ -95,425 +116,413 @@
         </div>
     </header>
 
-    <!-- 4. BLOQUE EDITORIAL 1 (ANIMACIÓN CLIP-PATH ERA RESIDENCE) -->
-    <section class="editorial-split-section" id="concepto">
-        <div class="editorial-img-wrapper">
-            <img src="estudiantes.png" alt="Comunidad Estudiantil Liceo B4">
+    <!-- =========================================
+       SECCIÓN EDITORIAL 1: CONCEPTO
+    ========================================= -->
+    <section class="editorial-split-section">
+        <div class="editorial-img-wrapper reveal-on-scroll">
+            <img src="estudiantes.png" alt="Estudiantes del Liceo B4 en una actividad escolar" width="1538" height="1022" loading="lazy" decoding="async">
             <div class="img-badge">
-                <i data-feather="users"></i> Comunidad B4 Arica
+                <i data-feather="check-circle"></i> Orientación Rápida
             </div>
         </div>
-        <div class="editorial-content">
-            <span class="editorial-tag">Orientación & Tecnología Escolar</span>
-            <h2>Espacios vivos, estudiantes orientados.</h2>
-            <p>Sabemos lo complejo que puede ser para los estudiantes de enseñanza media orientarse en el establecimiento durante los primeros días o encontrar salas de laboratorios específicas. <strong>LiceoMap</strong> conecta la arquitectura física del establecimiento con la tecnología móvil cotidianamente usada por los alumnos.</p>
+        <div class="editorial-content reveal-on-scroll reveal-delay-1">
+            <span class="editorial-tag">01 / Innovación Escolar</span>
+            <h2>Navegación Intuitiva para Estudiantes y Docentes</h2>
+            <p>
+                Eliminamos la desorientación en los pasillos del establecimiento. Con nuestro visor interactivo y directorio integrado, cualquier miembro de la comunidad puede encontrar salas, laboratorios y oficinas administrativas al instante.
+            </p>
             <ul class="editorial-list">
-                <li><i data-feather="check-circle"></i> Ubicación exacta de pabellones y talleres técnico-profesionales.</li>
-                <li><i data-feather="check-circle"></i> Acceso rápido desde cualquier dispositivo smartphone.</li>
+                <li><i data-feather="check"></i> Buscador de salas por nombre y pabellón.</li>
+                <li><i data-feather="check"></i> Visualización de rutas y accesos principales.</li>
+                <li><i data-feather="check"></i> Optimizado para dispositivos móviles y tablets.</li>
             </ul>
         </div>
     </section>
 
-    <!-- 5. SECCIÓN EXPLORAR MÓDULOS DE LA APP (SCROLL HORIZONTAL CINEMÁTICO) -->
-    <section class="explore-section" id="servicios">
-        <div class="explore-track">
-            
-            <div class="explore-header">
-                <span class="editorial-tag" style="color:#4ade80;">Funcionalidades de la App</span>
-                <h2>Todo lo que incluye la Aplicación.</h2>
-                <p>Desliza lateralmente para descubrir cómo LiceoMap transforma la experiencia diaria dentro de tu Liceo.</p>
-            </div>
-
-            <!-- Card 1: Buscador de Salas -->
-            <div class="explore-card" onclick="focusLocation(-18.4785, -70.3128, 19)">
-                <div class="card-top">
-                    <span class="card-num">01</span>
-                    <i data-feather="search" class="card-icon"></i>
+    <!-- =========================================
+       EXPLORE SECTION (MÓDULOS DE LA APLICACIÓN DESTACADOS)
+    ========================================= -->
+    <div class="explore-pin-wrapper" id="servicios">
+        <section class="explore-section">
+            <div class="explore-track">
+                <div class="explore-header reveal-on-scroll">
+                    <span class="editorial-tag accent-badge">Módulos Principales</span>
+                    <h2>Aplicación Móvil en Acción</h2>
+                    <p>Diseñada específicamente para acelerar la orientación diaria con interfaces claras, vistas previas interactivas y respuestas al instante.</p>
                 </div>
-                <div>
+
+                <!-- Tarjeta 1: Buscador -->
+                <div class="explore-card float-anim reveal-on-scroll reveal-delay-1">
+                    <div class="app-glow-effect"></div>
+                    <div class="card-top">
+                        <span class="card-num">01</span>
+                        <div class="badge-app-live"><span class="pulse-dot"></span> App en vivo</div>
+                    </div>
                     <h3>Buscador de Salas</h3>
-                    <p>Encuentra tu aula en segundos. Filtra por pabellón, piso o especialidad técnica y obtén la ruta directa en el mapa.</p>
+                    <p>Encuentra tu aula en segundos. Filtra por pabellón, piso o especialidad técnica y obtén la ruta directa.</p>
+
+                    <button class="expand-hint card-toggle" type="button" aria-expanded="false" aria-controls="preview-salas">
+                        <i data-feather="mouse-pointer" class="icon-small" aria-hidden="true"></i>
+                        <span class="card-toggle-label">Mostrar vista previa</span>
+                    </button>
+
+                    <div class="card-preview-wrapper glow-box" id="preview-salas" role="region" aria-label="Vista previa desplazable del buscador de salas" aria-hidden="true" tabindex="-1">
+                        <img src="salas.png" alt="Vista previa del módulo de búsqueda de salas" width="1080" height="2400" loading="lazy" decoding="async" class="card-preview-img">
+                    </div>
                 </div>
-                <div class="card-action">Ver en Mapa Interactivo &rarr;</div>
+
+                <!-- Tarjeta 2: Horarios -->
+                <div class="explore-card float-anim reveal-delay-2-anim reveal-on-scroll reveal-delay-2">
+                    <div class="app-glow-effect cyan-glow"></div>
+                    <div class="card-top">
+                        <span class="card-num">02</span>
+                        <div class="badge-app-live"><span class="pulse-dot"></span> App en vivo</div>
+                    </div>
+                    <h3>Horarios por RUT</h3>
+                    <p>Consulta personalizada para estudiantes y profesores. Planificación diaria sincronizada por UTP.</p>
+
+                    <button class="expand-hint card-toggle" type="button" aria-expanded="false" aria-controls="preview-horarios">
+                        <i data-feather="mouse-pointer" class="icon-small" aria-hidden="true"></i>
+                        <span class="card-toggle-label">Mostrar vista previa</span>
+                    </button>
+
+                    <div class="card-preview-wrapper glow-box" id="preview-horarios" role="region" aria-label="Vista previa desplazable de horarios" aria-hidden="true" tabindex="-1">
+                        <img src="horarios.png" alt="Vista previa del módulo de horarios" width="1080" height="2400" loading="lazy" decoding="async" class="card-preview-img">
+                    </div>
+                </div>
+
+                <!-- Tarjeta 3: Anuncios -->
+                <div class="explore-card float-anim reveal-delay-3-anim reveal-on-scroll reveal-delay-3">
+                    <div class="app-glow-effect amber-glow"></div>
+                    <div class="card-top">
+                        <span class="card-num">03</span>
+                        <div class="badge-app-live"><span class="pulse-dot"></span> App en vivo</div>
+                    </div>
+                    <h3>Avisos en Tiempo Real</h3>
+                    <p>Comunicados oficiales de dirección e inspectoría directo a tu pantalla. Entérate de eventos y talleres.</p>
+
+                    <button class="expand-hint card-toggle" type="button" aria-expanded="false" aria-controls="preview-anuncios">
+                        <i data-feather="mouse-pointer" class="icon-small" aria-hidden="true"></i>
+                        <span class="card-toggle-label">Mostrar vista previa</span>
+                    </button>
+
+                    <div class="card-preview-wrapper glow-box" id="preview-anuncios" role="region" aria-label="Vista previa desplazable de anuncios" aria-hidden="true" tabindex="-1">
+                        <img src="anuncios.png" alt="Vista previa del módulo de anuncios" width="1080" height="2400" loading="lazy" decoding="async" class="card-preview-img">
+                    </div>
+                </div>
             </div>
+        </section>
+    </div>
 
-            <!-- Card 2: Login y Horarios por RUT -->
-            <div class="explore-card" onclick="focusLocation(-18.4780, -70.3122, 19)">
-                <div class="card-top">
-                    <span class="card-num">02</span>
-                    <i data-feather="user-check" class="card-icon"></i>
-                </div>
-                <div>
-                    <h3>Horario por RUT</h3>
-                    <p>Al iniciar sesión con tu RUT y contraseña, la app reconoce tu curso automáticamente y te muestra los bloques del día sin enredos.</p>
-                </div>
-                <div class="card-action">Sincronización Personalizada &rarr;</div>
-            </div>
-
-            <!-- Card 3: Biblioteca y Cubículos -->
-            <div class="explore-card" onclick="focusLocation(-18.4788, -70.3130, 19)">
-                <div class="card-top">
-                    <span class="card-num">03</span>
-                    <i data-feather="book-open" class="card-icon"></i>
-                </div>
-                <div>
-                    <h3>Biblioteca</h3>
-                    <p>La biblioteca es un punto muy importante del nuestro liceo B4 y es de nuestro agrado informarles de ella.</p>
-                </div>
-                <div class="card-action">Accede a ella para leer tus libros o comics favoritos y no solo eso, Tambien para jugar algun juego de mesa &rarr;</div>
-            </div>
-
-            <!-- Card 4: Casino Escolar -->
-            <div class="explore-card" onclick="focusLocation(-18.4782, -70.3125, 19)">
-                <div class="card-top">
-                    <span class="card-num">04</span>
-                    <i data-feather="coffee" class="card-icon"></i>
-                </div>
-                <div>
-                    <h3>Informacion de sectores</h3>
-                    <p>Con nuestra aplicacion, Buscamos mantenerte informado en todo momento para que sepas donde estas, seleccionando el sector deseado se te abrira la informacion de la sala.</p>
-                </div>
-                <div class="card-action">Ver Ubicación Casino &rarr;</div>
-            </div>
-
-            <!-- Card 5: Anuncios Emergentes -->
-            <div class="explore-card">
-                <div class="card-top">
-                    <span class="card-num">05</span>
-                    <i data-feather="bell" class="card-icon"></i>
-                </div>
-                <div>
-                    <h3>Anuncios Globales</h3>
-                    <p>Tambien buscamos una comunicacion mas directa entre liceo y estudiante, con la aplicacion el liceo podra enviarte notificaciones a tu telefono directamente, inforamandote sobre salidas mas temprano, emergencias o alguna que otra noticia de el liceo mismo.</p>
-                </div>
-                <div class="card-action">Comunicación Oficial &rarr;</div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- 6. BLOQUE EDITORIAL 2 (ANIMACIÓN REVERSE & PROYECCIÓN NACIONAL) -->
-    <section class="editorial-split-section reverse">
-        <div class="editorial-img-wrapper">
-            <img src="image_fddfee.png" alt="Actividades e Innovación en Liceo">
-            <div class="img-badge">
-                <i data-feather="award"></i> Proyecto de Fin de Año 2026
-            </div>
-        </div>
-        <div class="editorial-content">
-            <span class="editorial-tag">Nuestro objetivo</span>
-            <h2>Nacemos en el Liceo Antonio Varas de la Barra (B4) para llegar a todo Chile.</h2>
-            <p>LiceoMap inicia como una iniciativa de innovación tecnológica en el <strong>Liceo Antonio Varas de la Barra (B4)</strong>. Nuestra meta es validar el sistema aquí y posteriormente adaptar el motor interactivo para cualquier establecimiento del país que requiera modernizar su orientación escolar.</p>
-        </div>
-    </section>
-
-    <!-- 7. EL MAPA INTERACTIVO (DEMO DEL ESTABLECIMIENTO) -->
+    <!-- =========================================
+       MAPA INTERACTIVO SECTION
+    ========================================= -->
     <section class="map-section" id="mapa-container">
-        <div class="map-wrapper">
+        <div class="map-wrapper reveal-on-scroll">
+            <div id="map" role="region" aria-label="Mapa interactivo del Liceo B4 Antonio Varas"></div>
+            <p id="map-status" class="map-status" role="status">Cargando el mapa…</p>
             <div class="map-overlay">
                 <div class="map-overlay-header">
-                    <span class="live-dot"></span>
-                    <h3>Liceo Antonio Varas de la Barra (B4)</h3>
+                    <div class="live-dot"></div>
+                    <h3>Liceo B4 Antonio Varas</h3>
                 </div>
-                <p><i data-feather="map-pin"></i> Av. Loa #2200, Arica • Mapa Interactivo de Prueba</p>
-                
-                <div class="map-quick-buttons">
-                    <button onclick="focusLocation(-18.4785, -70.3128, 19)" class="btn-map-quick">Salas</button>
-                    <button onclick="focusLocation(-18.4780, -70.3122, 19)" class="btn-map-quick">Horarios</button>
-                    <button onclick="focusLocation(-18.4788, -70.3130, 19)" class="btn-map-quick">Biblioteca</button>
-                    <button onclick="focusLocation(-18.4782, -70.3125, 19)" class="btn-map-quick">Casino</button>
+                <p><i data-feather="map-pin" class="icon-small" aria-hidden="true"></i> Arica, Región de Arica y Parinacota</p>
+                <div class="map-quick-buttons" role="group" aria-label="Sectores del establecimiento">
+                    <span class="btn-map-quick">Pabellón A</span>
+                    <span class="btn-map-quick">Pabellón B</span>
+                    <span class="btn-map-quick">Laboratorios</span>
                 </div>
             </div>
-            <div id="map"></div>
         </div>
     </section>
 
-    <!-- 8. CANAL OFICIAL DE ANUNCIOS GLOBALES -->
+    <!-- =========================================
+       ANUNCIOS SECTION
+    ========================================= -->
     <section class="anuncios-section" id="anuncios">
-        <div class="anuncios-header">
+        <div class="anuncios-header reveal-on-scroll">
             <div>
-                <span class="editorial-tag" style="color:#d97706;">Módulo de la App</span>
-                <h2>Ejemplo de los Anuncios.</h2>
+                <span class="editorial-tag alert-tag">Actualidad Institucional</span>
+                <h2>Tablón de Anuncios y Comunicados</h2>
             </div>
-            <p>Así visualizan los estudiantes la información crítica enviada por los inspectores y dirección del colegio.</p>
+            <p>Información oficial emitida por UTP e Inspectoría General del establecimiento.</p>
         </div>
 
         <div class="anuncios-grid">
-            <!-- Anuncio 1 -->
-            <div class="anuncio-card urgente">
-                <div>
-                    <div class="anuncio-meta">
-                        <span><i data-feather="clock"></i> Hoy, 08:30 hrs</span>
-                        <span class="tag-urgente">Alerta de Tiempo / Salida Temprana</span>
-                    </div>
-                    <h3>Suspensión de actividades por contingencia climática</h3>
-                    <p>Por disposición oficial, la jornada de la tarde finalizará a las 13:00 hrs. La app mantendrá informada a la comunidad.</p>
+            <div class="anuncio-card urgente reveal-on-scroll reveal-delay-1">
+                <div class="anuncio-meta">
+                    <time datetime="2026-09-29">29 Septiembre 2026</time>
+                    <span class="tag-urgente">Urgente</span>
                 </div>
-                <div class="anuncio-link">Detalles del comunicado &rarr;</div>
+                <h3>Modificación de Horario por Actividad Académica</h3>
+                <p>Se comunica a toda la comunidad estudiantil que la jornada de la tarde finalizará a las 16:30 hrs por consejo de profesores extraordinario.</p>
+                <span class="anuncio-link">Leer comunicado completo &rarr;</span>
             </div>
 
-            <!-- Anuncio 2 -->
-            <div class="anuncio-card">
-                <div>
-                    <div class="anuncio-meta">
-                        <span><i data-feather="calendar"></i> Ayer</span>
-                        <span class="tag-info">Académico</span>
-                    </div>
-                    <h3>Modificación de Bloques de Horario</h3>
-                    <p>Revisa la actualización en la distribución de los bloques académicos para los terceros y cuartos medios técnico-profesionales.</p>
+            <div class="anuncio-card reveal-on-scroll reveal-delay-2">
+                <div class="anuncio-meta">
+                    <time datetime="2026-09-27">27 Septiembre 2026</time>
+                    <span class="tag-info">Informativo</span>
                 </div>
-                <div class="anuncio-link">Ver actualización de bloques &rarr;</div>
+                <h3>Apertura de Inscripciones para Talleres Extraescolares</h3>
+                <p>Ya se encuentran abiertas las postulaciones para los talleres deportivos y artísticos del segundo semestre. Inscríbete desde la app móvil.</p>
+                <span class="anuncio-link">Ver detalles &rarr;</span>
             </div>
 
-            <!-- Anuncio 3 -->
-            <div class="anuncio-card">
-                <div>
-                    <div class="anuncio-meta">
-                        <span><i data-feather="book"></i> Hace 2 días</span>
-                        <span class="tag-info">Biblioteca</span>
-                    </div>
-                    <h3>Biblioteca</h3>
-                    <p>Biblioteca estara cerrada el tercer bloque por x motivo.</p>
+            <div class="anuncio-card reveal-on-scroll reveal-delay-3">
+                <div class="anuncio-meta">
+                    <time datetime="2026-09-25">25 Septiembre 2026</time>
+                    <span class="tag-info">General</span>
                 </div>
-                <div class="anuncio-link">Explorar espacio &rarr;</div>
+                <h3>Actualización del Plano de Ubicación en Pabellón C</h3>
+                <p>Las salas del tercer piso del pabellón C han sido renombradas según la nueva distribución técnica. Consulta el mapa interactivo actualizado.</p>
+                <span class="anuncio-link">Revisar cambios &rarr;</span>
             </div>
         </div>
     </section>
 
-    <!-- 9. MOCKUP DE INICIO DE SESIÓN / APP PREVIEW -->
+    <!-- =========================================
+       APP PREVIEW / LOGIN MOCKUP SECTION
+    ========================================= -->
     <section class="app-preview-section" id="app-preview">
-        <div class="app-preview-box">
+        <div class="app-preview-box reveal-on-scroll">
             <div class="app-preview-text">
-                <span class="editorial-tag">Experiencia de Usuario</span>
-                <h2>Ingresa con tu RUT y accede a tu Horario.</h2>
-                <p>La aplicación cuenta con un sistema de autenticación seguro. Al escribir tu RUT, el sistema deduce tu curso automáticamente.</p>
-                
+                <span class="editorial-tag">Prueba el Sistema</span>
+                <h2>Consulta tu Horario y Sala con tu RUT</h2>
+                <p>Ingresa tu identificador personal para comprobar el funcionamiento directo de la aplicación orientada a estudiantes.</p>
                 <div class="app-features-mini">
-                    <div class="feature-item"><i data-feather="lock"></i> Acceso Seguro</div>
-                    <div class="feature-item"><i data-feather="zap"></i> Sincronización al instante</div>
-                    <div class="feature-item"><i data-feather="wifi-off"></i> Funciona offline en el mapa</div>
+                    <div class="feature-item">
+                        <i data-feather="check-circle"></i> Sin necesidad de registros complejos
+                    </div>
+                    <div class="feature-item">
+                        <i data-feather="check-circle"></i> Sincronización automática con UTP
+                    </div>
                 </div>
             </div>
-
-            <div class="app-mockup-card">
+            <div class="app-mockup-card pulse-glow">
                 <div class="mockup-header">
-                    <img src="image-removebg-preview.png" alt="Logo" class="mockup-logo">
-                    <span>LiceoMap App Login</span>
+                    <img src="logo_lm_ligero-removebg-preview.png" alt="Icon" width="563" height="443" decoding="async" class="mockup-logo">
+                    <span>LiceoMap - Acceso Alumnos</span>
                 </div>
-                <form class="mockup-form" onsubmit="event.preventDefault();">
-                    <label>RUT del Estudiante</label>
-                    <input type="text" placeholder="12.345.678-K" disabled value="21.456.789-0">
-                    
-                    <label>Contraseña</label>
-                    <input type="password" value="••••••••" disabled>
-                    
-                    <button class="btn-mockup" type="button">Iniciar Sesión (Demostración)</button>
-                    
-                    <div class="mockup-course-detected">
-                        <i data-feather="check"></i> Curso detectado: <strong>3° Medio B PROGRAMACION</strong>
-                    </div>
+                <form class="mockup-form" id="student-demo-form">
+                    <label for="rut-input">Ingrese su RUT</label>
+                    <input type="text" id="rut-input" placeholder="Ej: 22.709.631-4" autocomplete="off" autocapitalize="characters" spellcheck="false" inputmode="text" maxlength="12" aria-describedby="rut-help" required>
+                    <p id="rut-help" class="rut-help">Escribe los números y el dígito verificador; los puntos y el guion se agregan automáticamente.</p>
+                    <button type="submit" class="btn-mockup">Consultar Mi Estado</button>
+                    <p id="student-demo-status" class="rut-feedback" role="status" aria-live="polite" hidden></p>
                 </form>
             </div>
         </div>
     </section>
 
-    <!-- 10. FOOTER INSTITUCIONAL -->
+    </main>
+    <!-- =========================================
+       FOOTER INSTITUCIONAL
+    ========================================= -->
     <footer class="footer-institucional">
         <div class="footer-info">
             <div class="footer-brand">
-                <img src="image-removebg-preview.png" alt="Logo AVB" class="footer-logo">
+                <img src="logo_lm_ligero-removebg-preview.png" alt="Logo" width="563" height="443" loading="lazy" decoding="async" class="footer-logo">
                 <h4>LiceoMap</h4>
             </div>
-            <p>Plataforma de Orientación Espacial y Gestión Escolar.<br>Desarrollado para el Liceo Antonio Varas de la Barra (Arica, Chile).</p>
+            <p>Plataforma oficial de orientación espacial y gestión escolar.<br>Liceo B4 Antonio Varas de la Barra • Arica, Chile.</p>
         </div>
         <div class="footer-links">
             <span class="footer-title">Navegación</span>
             <a href="#concepto">Concepto</a>
-            <a href="#servicios">Módulos de la App</a>
-            <a href="#mapa-container">Mapa Interactivo B4</a>
+            <a href="#servicios">Módulos</a>
+            <a href="#mapa-container">Mapa Interactivo</a>
             <a href="#anuncios">Anuncios</a>
-            <a href="https://liceoavb.cl" target="_blank">Sitio Web Oficial Liceo B4</a>
+        </div>
+        <div class="footer-links">
+            <span class="footer-title">Administración</span>
+            <a href="#admin-modal" id="footer-admin-link">Inicio Sesión Admin</a>
+            <a href="#app-preview">Probar App Móvil</a>
         </div>
     </footer>
 
-    <!-- ==========================================
-         SCRIPTS Y ANIMACIONES GSAP / LENIS / LEAFLET
-    =========================================== -->
-    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- =========================================
+         1. MODAL DE AUTENTICACIÓN ADMIN
+    ========================================= -->
+    <div id="admin-modal" class="modal-overlay" hidden>
+        <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="admin-dialog-title" tabindex="-1">
+            <button id="close-admin-modal" class="btn-close-modal" type="button" aria-label="Cerrar ventana de inicio de sesión">&times;</button>
+            <div class="modal-header">
+                <i data-feather="shield" class="modal-icon" aria-hidden="true"></i>
+                <h2 id="admin-dialog-title">Acceso Administrativo</h2>
+                <p>Ingreso exclusivo para Dirección, UTP e Inspectoría</p>
+            </div>
+            <form id="admin-login-form" class="modal-form">
+                <div class="form-group">
+                    <label for="admin-rut">RUT Institucional</label>
+                    <input type="text" id="admin-rut" placeholder="12.345.678-9" autocomplete="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="admin-pass">Contraseña</label>
+                    <input type="password" id="admin-pass" placeholder="••••••••" autocomplete="current-password" required>
+                </div>
+                <button type="submit" class="btn-submit-admin">
+                    <i data-feather="log-in" aria-hidden="true"></i> Iniciar Sesión
+                </button>
+                <p id="admin-login-status" class="form-status" role="status" aria-live="polite"></p>
+            </form>
+        </section>
+    </div>
 
-    <script>
-        // Inicializar iconos Feather
-        feather.replace();
+   <!-- =========================================
+         2. PANEL DE CONTROL ADMINISTRATIVO (DASHBOARD)
+    ========================================= -->
+    <section id="admin-dashboard" class="admin-dashboard-section" aria-labelledby="admin-dashboard-title" tabindex="-1" hidden>
+        <aside class="admin-sidebar">
+            <div class="admin-brand">
+                <i data-feather="shield"></i>
+                <span>LiceoMap <strong>Admin</strong></span>
+            </div>
+            <nav class="admin-menu" role="tablist" aria-label="Secciones del panel administrativo">
+                <button id="tab-button-anuncios" class="admin-tab-btn active" type="button" role="tab" data-tab="tab-anuncios" aria-controls="tab-anuncios" aria-selected="true">
+                    <i data-feather="bell"></i> Gestionar Anuncios
+                </button>
+                <button id="tab-button-horarios" class="admin-tab-btn" type="button" role="tab" data-tab="tab-horarios" aria-controls="tab-horarios" aria-selected="false" tabindex="-1">
+                    <i data-feather="calendar"></i> Cargar Horarios
+                </button>
+                <button id="tab-button-salas" class="admin-tab-btn" type="button" role="tab" data-tab="tab-salas" aria-controls="tab-salas" aria-selected="false" tabindex="-1">
+                    <i data-feather="map-pin"></i> Editar Mapa
+                </button>
+                <button id="tab-button-usuarios" class="admin-tab-btn" type="button" role="tab" data-tab="tab-usuarios" aria-controls="tab-usuarios" aria-selected="false" tabindex="-1">
+                    <i data-feather="users"></i> Estudiantes y Roles
+                </button>
+            </nav>
+            <div class="admin-user-info">
+                <span id="admin-user-name" class="user-role-badge">Dirección / UTP</span>
+                <button id="btn-logout-admin" class="btn-logout" type="button">
+                    <i data-feather="log-out" aria-hidden="true"></i> Cerrar Sesión
+                </button>
+            </div>
+        </aside>
 
-        // 1. Lenis Smooth Scroll Setup
-        const lenis = new Lenis({
-            duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            smooth: true
-        });
+        <div class="admin-content">
+            <header class="admin-topbar">
+                <h2 id="admin-dashboard-title" tabindex="-1">Panel de Administración Institucional</h2>
+                <span class="live-status"><span class="pulse-dot"></span> Sistema en línea</span>
+            </header>
 
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
-        requestAnimationFrame(raf);
+            <!-- PESTAÑA: GESTIONAR ANUNCIOS -->
+            <div id="tab-anuncios" class="admin-panel active" role="tabpanel" aria-labelledby="tab-button-anuncios" tabindex="0">
+                <div class="panel-header">
+                    <h3>Publicar Comunicado Oficial</h3>
+                    <p>Envía anuncios en tiempo real a la app de los estudiantes.</p>
+                </div>
+                <form class="dashboard-form demo-form" data-demo-message="Comunicado publicado correctamente.">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="demo-announcement-title">Título del Anuncio</label>
+                            <input id="demo-announcement-title" type="text" placeholder="Ej: Suspensión de clases por lluvia" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="demo-announcement-level">Nivel de Urgencia</label>
+                            <select id="demo-announcement-level">
+                                <option>Informativo General</option>
+                                <option>Urgente / Alerta</option>
+                                <option>Recordatorio UTP</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="demo-announcement-body">Contenido del Comunicado</label>
+                        <textarea id="demo-announcement-body" rows="4" placeholder="Escribe el mensaje aquí..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-dash-primary">Emitir Comunicado</button>
+                    <p class="form-status" role="status" aria-live="polite"></p>
+                </form>
+            </div>
 
-        gsap.registerPlugin(ScrollTrigger);
-        lenis.on('scroll', ScrollTrigger.update);
-        gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-        gsap.ticker.lagSmoothing(0, 0);
+            <!-- PESTAÑA: CARGAR HORARIOS -->
+            <div id="tab-horarios" class="admin-panel hidden" role="tabpanel" aria-labelledby="tab-button-horarios" tabindex="0" hidden>
+                <div class="panel-header">
+                    <h3>Sincronización de Horarios (UTP)</h3>
+                    <p>Sube el archivo Excel o CSV del sistema para actualizar la base de datos de los estudiantes.</p>
+                </div>
+                <label class="upload-zone">
+                    <i data-feather="upload-cloud" class="upload-icon" aria-hidden="true"></i>
+                    <span class="upload-title">Haz clic o arrastra el archivo aquí</span>
+                    <span class="upload-help">Soporta formatos .xlsx y .csv de la plataforma ministerial</span>
+                    <input type="file" id="file-upload" class="upload-file-input" accept=".csv,.xlsx" aria-describedby="file-upload-status">
+                </label>
+                <p id="file-upload-status" class="form-status" role="status" aria-live="polite"></p>
+                <button id="demo-sync-schedule" class="btn-dash-primary mt-3" type="button">
+                    <i data-feather="refresh-cw"></i> Actualizar Base de Datos
+                </button>
+                <p id="schedule-demo-status" class="form-status" role="status" aria-live="polite"></p>
+            </div>
 
-        // 2. Timeline del Loader
-        const tl = gsap.timeline();
-        document.body.style.overflow = 'hidden';
+            <!-- PESTAÑA: EDITAR MAPA INTERACTIVO -->
+            <div id="tab-salas" class="admin-panel hidden" role="tabpanel" aria-labelledby="tab-button-salas" tabindex="0" hidden>
+                <div class="panel-header">
+                    <h3>Gestión de Espacios Físicos</h3>
+                    <p>Renombra sectores o actualiza el uso de las salas si fueron modificadas.</p>
+                </div>
+                <form class="dashboard-form demo-form" data-demo-message="Mapa actualizado. Los cambios se reflejarán en la app.">
+                    <div class="form-group">
+                        <label for="demo-map-sector">Seleccionar Sector del Mapa</label>
+                        <select id="demo-map-sector">
+                            <option>Pabellón A - Primer Piso</option>
+                            <option>Pabellón B - Segundo Piso</option>
+                            <option>Laboratorio de Enlaces</option>
+                            <option>CRA (Biblioteca)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="demo-map-name">Nuevo Nombre o Asignación Técnica</label>
+                        <input id="demo-map-name" type="text" placeholder="Ej: Sala de Robótica y Programación" required>
+                    </div>
+                    <button type="submit" class="btn-dash-primary">Guardar Cambios en Mapa</button>
+                    <p class="form-status" role="status" aria-live="polite"></p>
+                </form>
+            </div>
 
-        tl.to(".loader-logo", { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.7)" })
-          .to(".loader-text", { y: "0%", duration: 0.9, ease: "power4.out" }, "-=0.4")
-          .to(".loader-sub", { opacity: 0.8, duration: 0.6 }, "-=0.4")
-          .to(".loader-text", { y: "-110%", duration: 0.8, ease: "power4.inOut", delay: 0.4 })
-          .to(".loader", { y: "-100%", duration: 1.1, ease: "power4.inOut" }, "-=0.4")
-          .to(".hero-status-bar", { opacity: 1, duration: 0.8, ease: "power2.out" }, "-=0.5")
-          .to(".hero-title", { y: "0%", duration: 1.1, stagger: 0.12, ease: "power4.out" }, "-=0.7")
-          .to(".hero-subtitle, .hero-actions", { opacity: 1, y: 0, duration: 0.9, stagger: 0.15, onComplete: () => { document.body.style.overflow = 'auto'; } }, "-=0.6");
+            <!-- PESTAÑA: USUARIOS Y ESTUDIANTES -->
+            <div id="tab-usuarios" class="admin-panel hidden" role="tabpanel" aria-labelledby="tab-button-usuarios" tabindex="0" hidden>
+                <div class="panel-header">
+                    <h3>Gestión de Matrícula y Accesos</h3>
+                    <p>Busca estudiantes por RUT para verificar su curso asignado o blanquear contraseñas.</p>
+                </div>
+                <form class="search-bar" id="demo-search-form">
+                    <i data-feather="search"></i>
+                    <label class="visually-hidden" for="demo-user-search">Buscar estudiantes</label>
+                    <input type="search" id="demo-user-search" placeholder="Buscar por RUT o Apellidos...">
+                    <button class="btn-dash-secondary" type="submit">Buscar</button>
+                </form>
+                <p id="demo-search-status" class="form-status" role="status" aria-live="polite"></p>
 
-        // 3. Hero Parallax Scroll
-        gsap.to(".hero-bg-image", {
-            yPercent: 30,
-            scale: 1.05,
-            ease: "none",
-            scrollTrigger: {
-                trigger: ".hero",
-                start: "top top",
-                end: "bottom top",
-                scrub: true
-            }
-        });
+                <table class="admin-table">
+                    <caption>Estudiantes y personal</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">RUT</th>
+                            <th scope="col">Nombre Completo</th>
+                            <th scope="col">Rol / Curso</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>21.456.789-0</td>
+                            <td>González, Matías</td>
+                            <td>3° Medio A</td>
+                            <td><button class="btn-text" type="button">Ver Ficha</button></td>
+                        </tr>
+                        <tr>
+                            <td>12.345.678-9</td>
+                            <td>Director / UTP</td>
+                            <td><span class="tag-admin">Administrador</span></td>
+                            <td><button class="btn-text" type="button">Editar</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
 
-        // 4. Animación Editorial estilo Era Residence (Clip-Path & Zoom)
-        gsap.utils.toArray('.editorial-split-section').forEach((section) => {
-            const imgWrapper = section.querySelector('.editorial-img-wrapper');
-            const img = section.querySelector('.editorial-img-wrapper img');
-            const content = section.querySelector('.editorial-content');
-
-            gsap.timeline({
-                scrollTrigger: {
-                    trigger: section,
-                    start: "top 80%",
-                    end: "top 25%",
-                    scrub: 1.2
-                }
-            })
-            .to(imgWrapper, {
-                clipPath: "inset(0% 0 0% 0 round 3rem)",
-                ease: "none"
-            }, 0)
-            .to(img, {
-                scale: 1,
-                ease: "none"
-            }, 0)
-            .to(content, {
-                opacity: 1,
-                y: 0,
-                scale: 1,
-                ease: "none"
-            }, 0);
-        });
-
-        // 5. Scroll Horizontal de Módulos
-        const exploreTrack = document.querySelector('.explore-track');
-        function getScrollAmount() {
-            return -(exploreTrack.scrollWidth - window.innerWidth);
-        }
-
-        if (window.innerWidth > 900) {
-            const horizontalTween = gsap.to(exploreTrack, {
-                x: getScrollAmount,
-                ease: "none"
-            });
-
-            ScrollTrigger.create({
-                trigger: ".explore-section",
-                start: "top top",
-                end: () => `+=${getScrollAmount() * -1}`,
-                pin: true,
-                animation: horizontalTween,
-                scrub: 1,
-                invalidateOnRefresh: true
-            });
-
-            gsap.timeline({
-                scrollTrigger: {
-                    trigger: ".explore-section",
-                    start: "top 70%",
-                    toggleActions: "play none none reverse"
-                }
-            })
-            .to(".explore-header", { opacity: 1, x: 0, duration: 1, ease: "power4.out" })
-            .to(".explore-card", { opacity: 1, y: 0, duration: 1, stagger: 0.15, ease: "power4.out" }, "-=0.7");
-        }
-
-        // 6. Expansión del Mapa
-        gsap.fromTo(".map-wrapper", 
-            { scale: 0.88, borderRadius: "3.5rem" },
-            { 
-                scale: 1, 
-                borderRadius: "1.5rem", 
-                ease: "power2.out",
-                scrollTrigger: {
-                    trigger: ".map-section",
-                    start: "top 85%",
-                    end: "top 20%",
-                    scrub: true
-                }
-            }
-        );
-
-        // 7. Reveal de Anuncios
-        gsap.to(".anuncio-card", {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            stagger: 0.2,
-            ease: "power4.out",
-            scrollTrigger: {
-                trigger: ".anuncios-section",
-                start: "top 75%",
-                toggleActions: "play none none reverse"
-            }
-        });
-
-        // 8. Leaflet Map setup (Liceo B4 Arica)
-        const map = L.map('map', {
-            zoomControl: false,
-            scrollWheelZoom: false
-        }).setView([-18.4783, -70.3126], 18);
-
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; OpenStreetMap & CARTO',
-            maxZoom: 20
-        }).addTo(map);
-
-        L.control.zoom({ position: 'bottomright' }).addTo(map);
-
-        // Puntos de Interés en Liceo B4
-        const locations = [
-            { lat: -18.4785, lng: -70.3128, title: "Pabellón de Salas y Aulas" },
-            { lat: -18.4780, lng: -70.3122, title: "Administración y Horarios" },
-            { lat: -18.4788, lng: -70.3130, title: "Biblioteca Central" },
-            { lat: -18.4782, lng: -70.3125, title: "Casino Estudiantil" }
-        ];
-
-        locations.forEach(loc => {
-            L.marker([loc.lat, loc.lng]).addTo(map)
-             .bindPopup(`<b>${loc.title}</b><br>Liceo B4 Antonio Varas de la Barra`);
-        });
-
-        window.focusLocation = function(lat, lng, zoomLevel) {
-            map.flyTo([lat, lng], zoomLevel, { duration: 1.8 });
-        };
-    </script>
 </body>
 </html>
