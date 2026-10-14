@@ -17,3 +17,11 @@ local.properties
 *.log
 *.sqlite
 *.sql.gz
+
+# Configuración privada y certificados del backend
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt

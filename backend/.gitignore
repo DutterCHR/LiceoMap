@@ -1,0 +1,9 @@
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+*.crt
+*.log
+test-results/

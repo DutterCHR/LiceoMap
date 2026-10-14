@@ -1,0 +1,35 @@
+name: liceomap-backend-integration
+services:
+  tests:
+    build: .
+    entrypoint: ["php"]
+    command: ["tests/integration.php"]
+    environment:
+      APP_ENV: test
+      TRUST_PROXY: "false"
+      DB_HOST: test-db
+      DB_PORT: "3306"
+      DB_NAME: liceomap_test
+      DB_USER: liceomap_test
+      DB_PASSWORD: ${TEST_DB_PASSWORD:?Completar TEST_DB_PASSWORD en .env}
+      DB_TLS_REQUIRED: "false"
+      CORS_ALLOWED_ORIGINS: https://panel.example.test
+      TEST_ALLOW_FIXTURES: "true"
+    depends_on:
+      test-db:
+        condition: service_healthy
+  test-db:
+    image: ${TEST_DB_IMAGE:-mariadb:11.4}
+    environment:
+      # Ambos motores reconocen MYSQL_*. No se publica ningún puerto.
+      MYSQL_DATABASE: liceomap_test
+      MYSQL_USER: liceomap_test
+      MYSQL_PASSWORD: ${TEST_DB_PASSWORD:?Completar TEST_DB_PASSWORD en .env}
+      MYSQL_ROOT_PASSWORD: ${TEST_DB_ROOT_PASSWORD:?Completar TEST_DB_ROOT_PASSWORD en .env}
+    tmpfs:
+      - /var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "MYSQL_PWD=$$MYSQL_PASSWORD mysql --protocol=TCP -h 127.0.0.1 -u $$MYSQL_USER $$MYSQL_DATABASE -e 'SELECT 1' >/dev/null 2>&1 || MYSQL_PWD=$$MYSQL_PASSWORD mariadb --protocol=TCP -h 127.0.0.1 -u $$MYSQL_USER $$MYSQL_DATABASE -e 'SELECT 1' >/dev/null 2>&1"]
+      interval: 3s
+      timeout: 3s
+      retries: 30

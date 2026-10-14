@@ -1,0 +1,37 @@
+name: liceomap-backend-local
+services:
+  api:
+    build: .
+    ports:
+      - "127.0.0.1:8080:10000"
+    environment:
+      APP_ENV: local
+      TRUST_PROXY: "false"
+      PORT: "10000"
+      DB_HOST: db
+      DB_PORT: "3306"
+      DB_NAME: colegio_db
+      DB_USER: liceomap_local
+      DB_PASSWORD: ${LOCAL_DB_PASSWORD:?Completar LOCAL_DB_PASSWORD en .env}
+      DB_TLS_REQUIRED: "false"
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-}
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: mariadb:11.4
+    environment:
+      MARIADB_DATABASE: colegio_db
+      MARIADB_USER: liceomap_local
+      MARIADB_PASSWORD: ${LOCAL_DB_PASSWORD:?Completar LOCAL_DB_PASSWORD en .env}
+      MARIADB_ROOT_PASSWORD: ${LOCAL_DB_ROOT_PASSWORD:?Completar LOCAL_DB_ROOT_PASSWORD en .env}
+    volumes:
+      - local-db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    # Sin ports: MySQL solo es accesible en la red interna de Compose.
+volumes:
+  local-db:

@@ -1,0 +1,13 @@
+*
+!public/
+!public/**
+!src/
+!src/**
+!bin/
+!bin/**
+!database/
+!database/**
+!docker/
+!docker/**
+!tests/
+!tests/**
