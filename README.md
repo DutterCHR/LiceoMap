@@ -11,6 +11,7 @@ Plataforma móvil y web de navegación interactiva y gestión de horarios para l
 * `design/`: Recursos gráficos, mapa de referencia e insumos vectoriales SVG (Inkscape).
 * `docs/`: Documentación oficial, definición de roles (`01-equipo.md`) y documentos del proyecto.
 * `web/`: Portal web institucional y visor interactivo (HTML/CSS).
+* `backend/`: API PHP/PDO de lectura para web y Android; [ejecución local, pruebas y despliegue](backend/README.md).
 
 ---
 
