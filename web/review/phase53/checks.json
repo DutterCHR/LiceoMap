@@ -1,0 +1,71 @@
+{
+  "browser": "Chrome/155.0.8059.85",
+  "baseline": false,
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 900,
+      "immersive": true,
+      "readingPreserved": true
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "immersive": true,
+      "readingPreserved": true
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "immersive": true,
+      "readingPreserved": true
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "immersive": true,
+      "readingPreserved": true
+    },
+    {
+      "width": 320,
+      "height": 720,
+      "immersive": false,
+      "readingPreserved": true
+    },
+    {
+      "width": 375,
+      "height": 780,
+      "immersive": false,
+      "readingPreserved": true
+    }
+  ],
+  "scrubExperiments": [
+    {
+      "value": 0.35,
+      "gapAfterTwoFrames": 0.014542449323393158,
+      "settledWithinMs": 372.09999999962747
+    }
+  ],
+  "performance": [
+    {
+      "id": "liceomap-cinema",
+      "samples": 299,
+      "durationMs": 3507.4000000003725,
+      "medianMs": 10,
+      "p95Ms": 10.100000000000364,
+      "maxMs": 10.800000000000182,
+      "over34ms": 0,
+      "longTasks": []
+    },
+    {
+      "id": "liceomap-finale",
+      "samples": 299,
+      "durationMs": 3506.0999999996275,
+      "medianMs": 10,
+      "p95Ms": 10.100000000000364,
+      "maxMs": 10.200000000000728,
+      "over34ms": 0,
+      "longTasks": []
+    }
+  ]
+}

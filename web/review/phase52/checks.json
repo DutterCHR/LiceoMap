@@ -1,0 +1,62 @@
+[
+  {
+    "width": 1280,
+    "height": 720,
+    "immersive": true,
+    "reverse": true,
+    "keyboard": true,
+    "fixedResult": true,
+    "validator": true,
+    "stableLayout": true
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "immersive": true,
+    "reverse": true,
+    "keyboard": true,
+    "fixedResult": true,
+    "validator": true,
+    "stableLayout": true
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "immersive": true,
+    "reverse": true,
+    "keyboard": true,
+    "fixedResult": true,
+    "validator": true,
+    "stableLayout": true
+  },
+  {
+    "width": 320,
+    "height": 720,
+    "immersive": false,
+    "reverse": true,
+    "keyboard": true,
+    "fixedResult": true,
+    "validator": true,
+    "stableLayout": true
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "immersive": true,
+    "reverse": true,
+    "keyboard": true,
+    "fixedResult": true,
+    "validator": true,
+    "stableLayout": true
+  },
+  {
+    "width": 375,
+    "height": 780,
+    "immersive": false,
+    "reverse": true,
+    "keyboard": true,
+    "fixedResult": true,
+    "validator": true,
+    "stableLayout": true
+  }
+]

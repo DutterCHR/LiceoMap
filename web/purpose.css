@@ -1,0 +1,209 @@
+﻿/* Phase 5.1: document-first styles, isolated from the approved cinema. */
+.purpose-skip { grid-column: 1 / -1; justify-content: flex-end; }
+.purpose-community { position: absolute; width: 14px; height: 14px; border: 1px solid #a7eed9; border-radius: 50%; background: #173b3f; }
+.community-a { left: 23%; top: 20%; }
+.community-b { right: 17%; top: 28%; }
+.community-c { left: 13%; bottom: 20%; }
+.community-d { right: 27%; bottom: 13%; }
+.purpose-screen-surface { position: absolute; inset: -1px; opacity: 0; background: #0b252a; }
+.purpose-horizon { position: absolute; inset: 0; opacity: 0; pointer-events: none; background: radial-gradient(ellipse at 25% 55%, #72bdae26, transparent 70%), linear-gradient(160deg, #28656b38, #193e4630); }
+.purpose-section.is-immersive { position: absolute; inset: 0; z-index: 7; margin: 0; border: 0; background: #0b252a; overflow: hidden; }
+.is-immersive::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 80% 65%, #2c8b7550, transparent 65%), linear-gradient(115deg, transparent 30%, #10384040); }
+.is-immersive .purpose-masthead { position: absolute; left: 0; right: 0; bottom: 0; padding: 1.2rem 5%; font-size: .55rem; }
+.is-immersive .purpose-nav { position: absolute; top: 85px; left: 5%; right: 5%; margin: 0; display: flex; justify-content: flex-start; background: transparent; border-top: 0; }
+.is-immersive .purpose-nav a { min-height: 42px; padding-inline: 1rem; font-size: .65rem; }
+.is-immersive .purpose-nav .purpose-skip { margin-left: auto; }
+.is-immersive .purpose-chapter { position: absolute; inset: 160px 6% 42px; margin: 0; padding: 0; border: 0; outline: none; transform-origin: 50% 35%; }
+.is-immersive .purpose-light { display: none; }
+.is-immersive .purpose-kicker { font-size: .6rem; margin-bottom: 1.4rem; gap: 1rem; }
+.is-immersive .purpose-title { font-size: clamp(2.6rem, 5.2vw, 5.5rem); line-height: 1.02; letter-spacing: -.045em; }
+.is-immersive .purpose-title-large { font-size: clamp(4rem, 9.7vw, 10rem); line-height: .91; font-weight: 450; }
+.is-immersive .purpose-line { width: fit-content; }
+.is-immersive .purpose-intro-bottom { margin-top: 4.5svh; grid-template-columns: 1fr 1.1fr; gap: 5vw; }
+.is-immersive .purpose-copy { font-size: clamp(.8rem, 1.1vw, 1rem); line-height: 1.8; }
+.is-immersive .purpose-copy p + p { margin-top: .85rem; }
+.is-immersive .purpose-wordmark { font-size: clamp(1.7rem, 3.5vw, 3.5rem); line-height: 1.15; }
+.is-immersive .purpose-link { margin-top: .8rem; }
+.is-immersive .purpose-heading-row { display: block; }
+.is-immersive .purpose-heading-row > p { display: none; }
+.is-immersive .purpose-frictions, .is-immersive .purpose-pillars { display: none; }
+.is-immersive .purpose-aside { position: absolute; bottom: 0; left: 0; right: 0; margin: 0; font-size: .65rem; }
+.is-immersive .purpose-deck { position: absolute; top: 55%; left: 50%; width: 0; height: 240px; z-index: 3; transform-origin: 0 50%; perspective: 1000px; }
+.is-immersive .purpose-friction { position: absolute; top: 0; left: 0; width: min(24vw, 350px); height: clamp(220px, 30svh, 280px); margin-left: max(-12vw, -175px); padding: clamp(1rem, 1.8vw, 1.7rem); border-radius: 14px; box-shadow: 0 20px 40px #020d1433; background: linear-gradient(150deg, #1c4149, #112d35); }
+.is-immersive .purpose-friction, .is-immersive .purpose-pillar { list-style: none; }
+.is-immersive .purpose-card-top { margin-bottom: 1rem; }
+.is-immersive .purpose-card-top svg { width: 24px; height: 24px; }
+.is-immersive .purpose-friction h3 { font-size: clamp(1.35rem, 2.1vw, 2rem); margin-bottom: .8rem; }
+.is-immersive .purpose-friction > p { font-size: .72rem; line-height: 1.65; margin-bottom: 1rem; }
+.is-immersive .purpose-card-foot { display: none; }
+.is-immersive .purpose-friction > .purpose-pillar { position: absolute; inset: 0; padding: 1.6rem; border: 0; text-align: left; }
+.is-immersive .purpose-pillar .purpose-node { position: static; display: block; margin-bottom: 1.2rem; }
+.is-immersive .purpose-pillar-label { font-size: .6rem; margin-bottom: .6rem; }
+.is-immersive .purpose-pillar h3 { font-size: clamp(1rem, 1.8vw, 1.7rem); text-transform: uppercase; letter-spacing: -.025em; }
+.is-immersive .purpose-pillar p { margin: .8rem 0 0; font-size: .8rem; line-height: 1.7; }
+.is-immersive .purpose-network { position: absolute; top: 32%; left: 5%; right: 5%; margin: 0; }
+.is-immersive .purpose-hub { padding: .45rem 1.2rem; font-size: 1.15rem; }
+.is-immersive .purpose-hub-caption { font-size: .5rem; }
+.is-immersive .purpose-connections { height: 8svh; }
+.is-immersive .purpose-vision-grid { margin-top: 3svh; gap: 4vw; grid-template-columns: 1fr 1.3fr; }
+.is-immersive .purpose-origin { border: 0; overflow: visible; background: transparent; }
+.is-immersive .purpose-origin-art { height: 22svh; background-size: 38px 38px, 38px 38px, auto; }
+.is-immersive .purpose-origin-ring { width: 105px; height: 105px; }
+.is-immersive .purpose-origin-ring:nth-of-type(6) { width: 175px; height: 175px; }
+.is-immersive .purpose-origin-caption { padding: .8rem 0 0; }
+.is-immersive .purpose-origin-caption p { margin-block: .35rem; font-size: .75rem; }
+.is-immersive .purpose-origin-caption > span { font-size: .5rem; }
+.is-immersive .purpose-vision-lead { display: none; }
+.is-immersive .purpose-vision-copy { font-size: .8rem; }
+.is-immersive .purpose-future { margin-top: 1rem; padding-left: 1rem; }
+.is-immersive .purpose-status { margin-bottom: .5rem; }
+.is-immersive .purpose-handoff { margin-top: 2svh; padding-top: 1.3svh; gap: 2rem; }
+.is-immersive .purpose-handoff .purpose-kicker { margin-bottom: .4rem; }
+.is-immersive .purpose-handoff h3 { font-size: 1.7rem; }
+.is-immersive .purpose-handoff p:last-child { max-width: 45rem; font-size: .65rem; line-height: 1.6; margin-top: .5rem; }
+.is-immersive .purpose-handoff .btn-hero-primary { font-size: .7rem; padding: .85rem 1rem; }
+@media (min-width: 901px) and (max-height: 800px) {
+    .is-immersive .purpose-vision .purpose-title { font-size: clamp(2.5rem, 4.4vw, 4.2rem); }
+    .is-immersive .purpose-vision-grid { margin-top: 2svh; }
+    .is-immersive .purpose-origin-art { height: 17svh; }
+    .is-immersive .purpose-origin-caption p { font-size: .65rem; }
+    .is-immersive .purpose-vision-copy { font-size: .72rem; }
+    .is-immersive .purpose-handoff { margin-top: 1.5svh; }
+    .is-immersive .purpose-handoff p:last-child { font-size: .6rem; max-width: 42rem; }
+}
+@media (max-width: 900px) {
+    .is-immersive .purpose-nav { top: 72px; left: 4%; right: 4%; flex-wrap: wrap; }
+    .is-immersive .purpose-nav a { padding: .35rem .45rem; min-height: 34px; font-size: .56rem; gap: .3rem; }
+    .is-immersive .purpose-nav .purpose-skip { font-size: .53rem; }
+    .is-immersive .purpose-chapter { inset: 136px 6% 38px; }
+    .is-immersive .purpose-kicker { font-size: .5rem; margin-bottom: 1rem; gap: .5rem; }
+    .is-immersive .purpose-title, .is-immersive .purpose-heading-row .purpose-title { font-size: clamp(1.7rem, 6.8vw, 3.5rem); }
+    .is-immersive .purpose-title-large { font-size: clamp(2.6rem, 11.7vw, 6rem); }
+    .is-immersive .purpose-intro-bottom { grid-template-columns: 1fr; gap: 3svh; margin-top: 4svh; }
+    .is-immersive .purpose-wordmark { font-size: clamp(1.6rem, 5.2vw, 2.5rem); }
+    .is-immersive .purpose-copy { font-size: .8rem; line-height: 1.8; }
+    .is-immersive .purpose-deck { top: calc(125px + 22svh); height: 410px; }
+    .is-immersive .purpose-friction { width: min(78vw, 500px); height: 126px; margin-left: max(-39vw, -250px); padding: .8rem 1rem; }
+    .is-immersive .purpose-card-top { margin: 0 0 .35rem; font-size: .48rem; }
+    .is-immersive .purpose-card-top svg { width: 17px; height: 17px; }
+    .is-immersive .purpose-friction h3 { font-size: 1.05rem; margin-bottom: .35rem; }
+    .is-immersive .purpose-friction h3 br { display: none; }
+    .is-immersive .purpose-friction > p { font-size: .6rem; line-height: 1.6; margin-bottom: 0; }
+    .is-immersive .purpose-card-foot { display: none; }
+    .is-immersive .purpose-friction > .purpose-pillar { padding: .8rem 1rem .8rem 2rem; }
+    .is-immersive .purpose-pillar .purpose-node { position: absolute; left: .8rem; top: 1.05rem; width: 6px; height: 6px; }
+    .is-immersive .purpose-pillar-label { font-size: .5rem; margin-bottom: .35rem; }
+    .is-immersive .purpose-pillar h3 { font-size: 1rem; margin: 0; }
+    .is-immersive .purpose-pillar p { margin-top: .45rem; font-size: .68rem; line-height: 1.6; }
+    .is-immersive .purpose-aside { font-size: .55rem; line-height: 1.6; }
+    .is-immersive .purpose-network { top: 116px; left: 0; right: 0; padding: 0; }
+    .is-immersive .purpose-hub { margin: auto; padding: .35rem 1rem; font-size: .9rem; }
+    .is-immersive .purpose-hub-caption { font-size: .45rem; }
+    .is-immersive .purpose-connections { display: block; width: 1px; height: 400px; margin: 0 auto; }
+    .is-immersive .purpose-vision-grid { grid-template-columns: 1fr; gap: 1.5svh; margin-top: 2svh; }
+    .is-immersive .purpose-origin { display: grid; grid-template-columns: 35% 1fr; align-items: center; gap: 1rem; }
+    .is-immersive .purpose-origin-art { height: 112px; }
+    .is-immersive .purpose-origin-ring { width: 55px; height: 55px; }
+    .is-immersive .purpose-origin-ring:nth-of-type(6) { width: 90px; height: 90px; }
+    .is-immersive .purpose-origin-coordinate { font-size: .35rem; left: 5px; bottom: 4px; }
+    .is-immersive .purpose-origin-caption { border: 0; padding: 0; }
+    .is-immersive .purpose-origin-caption p { font-size: .6rem; line-height: 1.6; }
+    .is-immersive .purpose-vision-copy { font-size: .69rem; line-height: 1.65; }
+    .is-immersive .purpose-future { margin-top: 1.5svh; }
+    .is-immersive .purpose-status { font-size: .5rem; margin-bottom: .3rem; }
+    .is-immersive .purpose-handoff { margin-top: 2svh; padding-top: 1.4svh; gap: .7rem; }
+    .is-immersive .purpose-handoff h3 { font-size: 1.3rem; }
+    .is-immersive .purpose-handoff p:last-child { font-size: .56rem; line-height: 1.6; }
+    .is-immersive .purpose-handoff .purpose-kicker { display: none; }
+    .is-immersive .purpose-handoff .btn-hero-primary { font-size: .6rem; padding: .65rem 1rem; }
+    .is-immersive .purpose-masthead { padding: .7rem 5%; font-size: .45rem; }
+}
+@media (max-width: 360px) {
+    .is-immersive .purpose-nav .purpose-skip { flex-basis: 100%; padding-block: 0; min-height: 25px; }
+    .is-immersive .purpose-chapter { top: 148px; }
+    .is-immersive .purpose-kicker { font-size: .43rem; }
+    .is-immersive .purpose-title, .is-immersive .purpose-heading-row .purpose-title { font-size: 1.55rem; }
+    .is-immersive .purpose-title-large { font-size: 2.65rem; }
+    .is-immersive .purpose-vision-copy { font-size: .63rem; }
+    .is-immersive .purpose-handoff p:last-child { font-size: .52rem; }
+}
+
+/* Phase 5.2: reading hierarchy, preserving the established scene compositions. */
+.purpose-section { --purpose-muted: #c9dcdf; }
+.purpose-copy { max-width: 58ch; font-size: clamp(1.0625rem, 1.25vw, 1.1875rem); line-height: 1.7; font-weight: 400; }
+.purpose-copy strong { font-weight: 600; }
+.purpose-friction > p, .purpose-pillar p { font-size: 1rem; line-height: 1.65; color: #c9dcdf; }
+.purpose-origin-caption p { font-size: 1rem; }
+.purpose-handoff p:last-child { font-size: 1rem; line-height: 1.65; max-width: 64ch; }
+.purpose-kicker { font-size: .75rem; color: #c8dadd; }
+.purpose-status { font-size: .75rem; }
+.purpose-link { font-size: .875rem; }
+.purpose-aside { font-size: .875rem; color: #c5d9dc; }
+.is-immersive .purpose-copy { font-size: clamp(1.0625rem, 1.25vw, 1.1875rem); line-height: 1.65; }
+.is-immersive .purpose-kicker { font-size: .7rem; letter-spacing: .08em; margin-bottom: 1.2rem; }
+.is-immersive .purpose-nav a { font-size: .8125rem; }
+.is-immersive .purpose-nav a span { font-size: .6875rem; color: #b2cdce; }
+.is-immersive .purpose-link { font-size: .875rem; }
+.is-immersive .purpose-deck { top: 55%; }
+.is-immersive .purpose-friction { height: clamp(250px, 30svh, 290px); padding: clamp(1rem, 1.65vw, 1.6rem); }
+.is-immersive .purpose-card-top { font-size: .6875rem; letter-spacing: .06em; margin-bottom: .75rem; }
+.is-immersive .purpose-friction h3 { font-size: clamp(1.375rem, 1.9vw, 1.8rem); font-weight: 500; margin-bottom: .6rem; }
+.is-immersive .purpose-friction > p { font-size: .96875rem; line-height: 1.55; margin-bottom: 0; color: #cfdee0; }
+.is-immersive .purpose-pillar-label { font-size: .75rem; color: #c3dcd3; }
+.is-immersive .purpose-pillar p { font-size: 1rem; line-height: 1.6; }
+.is-immersive .purpose-aside { font-size: .75rem; bottom: -20px; line-height: 1.6; }
+.is-immersive .purpose-hub-caption { font-size: .65rem; }
+.is-immersive .purpose-origin-art { height: 15svh; }
+.is-immersive .purpose-origin-caption p { font-size: .9375rem; line-height: 1.6; }
+.is-immersive .purpose-origin-caption > span { font-size: .6875rem; }
+.is-immersive .purpose-origin-coordinate { font-size: .625rem; }
+.is-immersive .purpose-vision-copy { font-size: 1.0625rem; line-height: 1.6; }
+.is-immersive .purpose-status { font-size: .75rem; }
+.is-immersive .purpose-handoff p:last-child { font-size: .875rem; line-height: 1.6; max-width: 64ch; }
+.is-immersive .purpose-handoff .btn-hero-primary { font-size: .8125rem; }
+.is-immersive .purpose-masthead { font-size: .625rem; }
+@media (min-width: 901px) and (max-height: 800px) {
+    .is-immersive .purpose-vision-grid { margin-top: 1.5svh; }
+    .is-immersive .purpose-origin-art { height: 12svh; }
+    .is-immersive .purpose-origin-caption p { font-size: .875rem; }
+    .is-immersive .purpose-vision-copy { font-size: 1.0625rem; }
+    .is-immersive .purpose-handoff p:last-child { font-size: .8125rem; line-height: 1.55; }
+    .is-immersive .purpose-handoff { gap: 1.5rem; }
+    .is-immersive .purpose-handoff h3 { font-size: 1.5rem; }
+}
+@media (max-width: 900px) {
+    .purpose-copy { font-size: 1rem; }
+    .purpose-section { --purpose-card-step: 166; }
+    .is-immersive .purpose-nav a { font-size: .6875rem; padding-inline: .35rem; }
+    .is-immersive .purpose-nav a span { display: none; }
+    .is-immersive .purpose-nav .purpose-skip { font-size: .6875rem; }
+    .is-immersive .purpose-kicker { font-size: .625rem; gap: .5rem; margin-bottom: .8rem; }
+    .is-immersive .purpose-copy { font-size: 1rem; line-height: 1.65; }
+    .is-immersive .purpose-deck { top: max(calc(125px + 18svh), calc(160px + 22vw)); }
+    .is-immersive .purpose-friction { height: 154px; width: min(84vw, 500px); margin-left: max(-42vw, -250px); padding: .7rem .9rem; }
+    .is-immersive .purpose-card-top { font-size: .625rem; margin-bottom: .35rem; }
+    .is-immersive .purpose-friction h3 { font-size: 1.0625rem; line-height: 1.2; margin-bottom: .4rem; }
+    .is-immersive .purpose-friction > p { font-size: .875rem; line-height: 1.5; }
+    .is-immersive .purpose-friction > .purpose-pillar { padding: .85rem 1rem .85rem 1.8rem; }
+    .is-immersive .purpose-pillar-label { font-size: .6875rem; margin-bottom: .4rem; }
+    .is-immersive .purpose-pillar h3 { font-size: 1rem; }
+    .is-immersive .purpose-pillar p { font-size: .9375rem; line-height: 1.5; margin-top: .5rem; }
+    .is-immersive .purpose-network { top: calc(44px + 12vw); }
+    .is-immersive .purpose-hub { font-size: .875rem; line-height: 1.2; }
+    .is-immersive .purpose-hub-caption { font-size: .5625rem; line-height: 1.3; margin-top: .15rem; }
+    .is-immersive .purpose-aside { font-size: .6875rem; bottom: 1px; }
+    .is-immersive .purpose-origin { grid-template-columns: 28% 1fr; gap: .8rem; }
+    .is-immersive .purpose-origin-art { height: 94px; }
+    .is-immersive .purpose-origin-caption p { font-size: .8125rem; line-height: 1.5; }
+    .is-immersive .purpose-origin-caption > span { font-size: .625rem; }
+    .is-immersive .purpose-origin-coordinate { font-size: .5rem; }
+    .is-immersive .purpose-vision-copy { font-size: .9375rem; line-height: 1.55; }
+    .is-immersive .purpose-vision .purpose-kicker { row-gap: 0; line-height: 1.4; }
+    .is-immersive .purpose-vision-grid { margin-top: 1.5svh; gap: 1svh; }
+    .is-immersive .purpose-future { margin-top: .8rem; }
+    .is-immersive .purpose-status { font-size: .6875rem; }
+    .is-immersive .purpose-handoff p:last-child { font-size: .8125rem; line-height: 1.5; }
+    .is-immersive .purpose-handoff .btn-hero-primary { font-size: .75rem; padding-block: .65rem; }
+    .is-immersive .purpose-handoff { gap: .6rem; margin-top: 1.5svh; }
+    .is-immersive .purpose-masthead { font-size: .55rem; }
+}

@@ -1,0 +1,538 @@
+[
+  {
+    "scene": "concepto",
+    "viewport": [
+      1280,
+      720
+    ],
+    "dpr": 1,
+    "phone": {
+      "x": 520,
+      "y": 111.734375,
+      "width": 230,
+      "height": 494.125,
+      "top": 111.734375,
+      "right": 750,
+      "bottom": 605.859375,
+      "left": 520
+    },
+    "scale": 1,
+    "x": 0,
+    "y": -36,
+    "contrasts": [
+      {
+        "element": "eyebrow",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "headline-line",
+        "ratio": 9.095786709871593
+      },
+      {
+        "element": "headline-line narrative-accent",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "scene-lead",
+        "ratio": 6.535568831047328
+      },
+      {
+        "element": "scene-note",
+        "ratio": 5.7880261393580525
+      }
+    ],
+    "planOverlaps": [],
+    "angles": [
+      0,
+      0,
+      0
+    ],
+    "image": "home.png",
+    "source": [
+      691,
+      1536
+    ],
+    "imageWidth": 214,
+    "imageOpacity": 1,
+    "imageVisibility": "visible",
+    "pixelRatio": 3.2289719626168223,
+    "filters": [
+      "none",
+      "none",
+      "none",
+      "none",
+      "none",
+      "none",
+      "none"
+    ],
+    "overlaps": [],
+    "inside": true,
+    "controlsGap": 346.078125,
+    "controls": {
+      "x": 530.625,
+      "y": 664,
+      "width": 208.75,
+      "height": 36,
+      "top": 664,
+      "right": 739.375,
+      "bottom": 700,
+      "left": 530.625
+    },
+    "exit": {
+      "x": 1085.453125,
+      "y": 660,
+      "width": 121.046875,
+      "height": 44,
+      "top": 660,
+      "right": 1206.5,
+      "bottom": 704,
+      "left": 1085.453125
+    },
+    "caption": {
+      "x": 558.703125,
+      "y": 640.125,
+      "width": 152.59375,
+      "height": 15.875,
+      "top": 640.125,
+      "right": 711.296875,
+      "bottom": 656,
+      "left": 558.703125
+    }
+  },
+  {
+    "scene": "servicios",
+    "viewport": [
+      1280,
+      720
+    ],
+    "dpr": 1,
+    "phone": {
+      "x": 398.3999938964844,
+      "y": 111.734375,
+      "width": 230.00003051757812,
+      "height": 494.125,
+      "top": 111.734375,
+      "right": 628.4000244140625,
+      "bottom": 605.859375,
+      "left": 398.3999938964844
+    },
+    "scale": 1,
+    "x": -121.6,
+    "y": -36,
+    "contrasts": [
+      {
+        "element": "eyebrow",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "headline-line",
+        "ratio": 9.39842130089455
+      },
+      {
+        "element": "headline-line narrative-accent",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "scene-lead",
+        "ratio": 6.535568831047328
+      },
+      {
+        "element": "card-index",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "P",
+        "ratio": 6.535568831047328
+      },
+      {
+        "element": "text-link capture-link",
+        "ratio": 6.532483378786233
+      }
+    ],
+    "planOverlaps": [],
+    "angles": [
+      0,
+      0,
+      0
+    ],
+    "image": "mapa.png",
+    "source": [
+      1080,
+      2400
+    ],
+    "imageWidth": 214.00003051757812,
+    "imageOpacity": 1,
+    "imageVisibility": "visible",
+    "pixelRatio": 5.046728252271384,
+    "filters": [
+      "none",
+      "none",
+      "none",
+      "none",
+      "none",
+      "none",
+      "none"
+    ],
+    "overlaps": [],
+    "inside": true,
+    "controlsGap": 346.078125,
+    "controls": {
+      "x": 530.625,
+      "y": 664,
+      "width": 208.75,
+      "height": 36,
+      "top": 664,
+      "right": 739.375,
+      "bottom": 700,
+      "left": 530.625
+    },
+    "exit": {
+      "x": 1085.453125,
+      "y": 660,
+      "width": 121.046875,
+      "height": 44,
+      "top": 660,
+      "right": 1206.5,
+      "bottom": 704,
+      "left": 1085.453125
+    },
+    "caption": {
+      "x": 523.984375,
+      "y": 640.125,
+      "width": 222.03125,
+      "height": 15.875,
+      "top": 640.125,
+      "right": 746.015625,
+      "bottom": 656,
+      "left": 523.984375
+    }
+  },
+  {
+    "scene": "horarios",
+    "viewport": [
+      1280,
+      720
+    ],
+    "dpr": 1,
+    "phone": {
+      "x": 641.5999755859375,
+      "y": 111.734375,
+      "width": 230,
+      "height": 494.125,
+      "top": 111.734375,
+      "right": 871.5999755859375,
+      "bottom": 605.859375,
+      "left": 641.5999755859375
+    },
+    "scale": 1,
+    "x": 121.6,
+    "y": -36,
+    "contrasts": [
+      {
+        "element": "eyebrow",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "headline-line",
+        "ratio": 9.39842130089455
+      },
+      {
+        "element": "headline-line narrative-accent",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "scene-lead",
+        "ratio": 6.535568831047328
+      },
+      {
+        "element": "card-index",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "P",
+        "ratio": 6.535568831047328
+      },
+      {
+        "element": "text-link",
+        "ratio": 6.532483378786233
+      },
+      {
+        "element": "text-link capture-link",
+        "ratio": 6.532483378786233
+      }
+    ],
+    "planOverlaps": [],
+    "angles": [
+      0,
+      0,
+      0
+    ],
+    "image": "home.png",
+    "source": [
+      691,
+      1536
+    ],
+    "imageWidth": 214,
+    "imageOpacity": 1,
+    "imageVisibility": "visible",
+    "pixelRatio": 3.2289719626168223,
+    "filters": [
+      "none",
+      "none",
+      "none",
+      "none",
+      "none",
+      "none",
+      "none"
+    ],
+    "overlaps": [],
+    "inside": true,
+    "controlsGap": 346.078125,
+    "controls": {
+      "x": 530.625,
+      "y": 664,
+      "width": 208.75,
+      "height": 36,
+      "top": 664,
+      "right": 739.375,
+      "bottom": 700,
+      "left": 530.625
+    },
+    "exit": {
+      "x": 1085.453125,
+      "y": 660,
+      "width": 121.046875,
+      "height": 44,
+      "top": 660,
+      "right": 1206.5,
+      "bottom": 704,
+      "left": 1085.453125
+    },
+    "caption": {
+      "x": 520.9453125,
+      "y": 640.125,
+      "width": 228.109375,
+      "height": 15.875,
+      "top": 640.125,
+      "right": 749.0546875,
+      "bottom": 656,
+      "left": 520.9453125
+    }
+  },
+  {
+    "scene": "anuncios",
+    "viewport": [
+      1280,
+      720
+    ],
+    "dpr": 1,
+    "phone": {
+      "x": 541.8880004882812,
+      "y": 111.734375,
+      "width": 230,
+      "height": 494.125,
+      "top": 111.734375,
+      "right": 771.8880004882812,
+      "bottom": 605.859375,
+      "left": 541.8880004882812
+    },
+    "scale": 1,
+    "x": 21.888,
+    "y": -36,
+    "contrasts": [
+      {
+        "element": "eyebrow",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "headline-line",
+        "ratio": 9.39842130089455
+      },
+      {
+        "element": "headline-line narrative-accent",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "scene-lead",
+        "ratio": 6.535568831047328
+      },
+      {
+        "element": "card-index",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "P",
+        "ratio": 6.535568831047328
+      },
+      {
+        "element": "text-link capture-link",
+        "ratio": 6.532483378786233
+      }
+    ],
+    "planOverlaps": [],
+    "angles": [
+      0,
+      0,
+      0
+    ],
+    "image": "anuncios.png",
+    "source": [
+      691,
+      1536
+    ],
+    "imageWidth": 214,
+    "imageOpacity": 1,
+    "imageVisibility": "visible",
+    "pixelRatio": 3.2289719626168223,
+    "filters": [
+      "none",
+      "none",
+      "none",
+      "none",
+      "none",
+      "none",
+      "none"
+    ],
+    "overlaps": [],
+    "inside": true,
+    "controlsGap": 346.078125,
+    "controls": {
+      "x": 530.625,
+      "y": 664,
+      "width": 208.75,
+      "height": 36,
+      "top": 664,
+      "right": 739.375,
+      "bottom": 700,
+      "left": 530.625
+    },
+    "exit": {
+      "x": 1085.453125,
+      "y": 660,
+      "width": 121.046875,
+      "height": 44,
+      "top": 660,
+      "right": 1206.5,
+      "bottom": 704,
+      "left": 1085.453125
+    },
+    "caption": {
+      "x": 549.375,
+      "y": 640.125,
+      "width": 171.25,
+      "height": 15.875,
+      "top": 640.125,
+      "right": 720.625,
+      "bottom": 656,
+      "left": 549.375
+    }
+  },
+  {
+    "scene": "orientacion",
+    "viewport": [
+      1280,
+      720
+    ],
+    "dpr": 1,
+    "phone": {
+      "x": 641.5999755859375,
+      "y": 111.734375,
+      "width": 230,
+      "height": 494.125,
+      "top": 111.734375,
+      "right": 871.5999755859375,
+      "bottom": 605.859375,
+      "left": 641.5999755859375
+    },
+    "scale": 1,
+    "x": 121.6,
+    "y": -36,
+    "contrasts": [
+      {
+        "element": "eyebrow",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "headline-line",
+        "ratio": 9.39842130089455
+      },
+      {
+        "element": "headline-line narrative-accent",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "scene-lead",
+        "ratio": 6.535568831047328
+      },
+      {
+        "element": "card-index",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "P",
+        "ratio": 6.535568831047328
+      },
+      {
+        "element": "text-link",
+        "ratio": 6.532483378786233
+      }
+    ],
+    "planOverlaps": [],
+    "angles": [
+      0,
+      0,
+      0
+    ],
+    "image": "home.png",
+    "source": [
+      691,
+      1536
+    ],
+    "imageWidth": 214,
+    "imageOpacity": 1,
+    "imageVisibility": "visible",
+    "pixelRatio": 3.2289719626168223,
+    "filters": [
+      "none",
+      "none",
+      "none",
+      "none",
+      "none",
+      "none",
+      "none"
+    ],
+    "overlaps": [],
+    "inside": true,
+    "controlsGap": 346.078125,
+    "controls": {
+      "x": 530.625,
+      "y": 664,
+      "width": 208.75,
+      "height": 36,
+      "top": 664,
+      "right": 739.375,
+      "bottom": 700,
+      "left": 530.625
+    },
+    "exit": {
+      "x": 1085.453125,
+      "y": 660,
+      "width": 121.046875,
+      "height": 44,
+      "top": 660,
+      "right": 1206.5,
+      "bottom": 704,
+      "left": 1085.453125
+    },
+    "caption": {
+      "x": 539.796875,
+      "y": 640.125,
+      "width": 190.40625,
+      "height": 15.875,
+      "top": 640.125,
+      "right": 730.203125,
+      "bottom": 656,
+      "left": 539.796875
+    }
+  }
+]

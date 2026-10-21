@@ -7,31 +7,176 @@ if (window.feather) {
     window.feather.replace();
 }
 
-window.addEventListener('load', () => {
-    const preloader = document.getElementById('app-preloader');
-    if (preloader) {
-        window.setTimeout(() => preloader.classList.add('hidden-loader'), 350);
-    }
-});
-
-const revealItems = document.querySelectorAll('.reveal-on-scroll');
-if (prefersReducedMotion.matches || !('IntersectionObserver' in window)) {
-    revealItems.forEach((item) => item.classList.add('is-visible'));
-} else {
-    const revealObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target);
-            }
+// The default phone is static. Entry and scroll transforms use separate layers.
+function initHeroPhone() {
+    const scene = document.querySelector('.hero-phone');
+    const entrance = scene?.querySelector('.phone-entrance');
+    let started = false;
+    let animation;
+    let observer;
+    let paused = false;
+    let heroAnimations = [];
+    let prepared = false;
+    let listeningForMotion = false;
+    const isPreparing = () => document.documentElement.classList.contains('intro-preparing');
+    const releasePreparation = () => {
+        window.clearTimeout(window.liceomapIntroFallback);
+        document.documentElement.classList.remove('intro-preparing');
+    };
+    const settle = () => {
+        releasePreparation();
+        if (!observer && !animation && !heroAnimations.length && !listeningForMotion) return;
+        observer?.disconnect();
+        observer = null;
+        animation?.cancel();
+        animation = null;
+        heroAnimations.forEach(item => item.cancel());
+        heroAnimations = [];
+        if (listeningForMotion) prefersReducedMotion.removeEventListener?.('change', onMotionChange);
+        listeningForMotion = false;
+    };
+    const onMotionChange = () => { if (prefersReducedMotion.matches) settle(); };
+    const prepare = () => {
+        if (prepared || started || !isPreparing() || prefersReducedMotion.matches ||
+            typeof entrance?.animate !== 'function' || !('IntersectionObserver' in window)) return;
+        prepared = true;
+        try {
+            // Prepare behind the opaque loader; play alongside the existing phone
+            // entry. These children are not targets of the hero's scroll tween.
+            ['.eyebrow', 'h1', '.scene-lead', '.scene-actions', '.scene-note'].forEach((selector, index) => {
+                const element = document.querySelector('.hero ' + selector);
+                if (!element) return;
+                const item = element.animate([
+                    { opacity: 0, transform: 'translateY(8px)' },
+                    { opacity: 1, transform: 'translateY(0)' }
+                ], { duration: 480, delay: index * 75, fill: 'both', easing: 'cubic-bezier(0.16, 1, 0.3, 1)' });
+                heroAnimations.push(item);
+                item.pause();
+            });
+        } catch (error) { settle(); }
+    };
+    const start = (shouldAnimate = false) => {
+        if (started) return;
+        started = true;
+        if (!entrance || !shouldAnimate || !isPreparing() || prefersReducedMotion.matches ||
+            typeof entrance.animate !== 'function' || !('IntersectionObserver' in window)) { settle(); return; }
+        try {
+            observer = new IntersectionObserver((entries) => {
+                if (!entries[0].isIntersecting || paused) return;
+                if (!isPreparing()) { settle(); return; }
+                observer.disconnect();
+                observer = null;
+                try {
+                    animation = entrance.animate([
+                        { opacity: 0, transform: 'translate3d(0, 100vh, -180px) rotateX(25deg) rotateY(-35deg) rotateZ(-18deg) scale(0.72)' },
+                        { opacity: 1, transform: 'translateY(0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1)' }
+                    ], { duration: 1350, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' });
+                    // Its opacity-0 first frame now exists before visibility is released.
+                    releasePreparation();
+                    heroAnimations.forEach(item => item.play());
+                    animation.onfinish = settle;
+                } catch (error) { settle(); }
+            }, { threshold: .15 });
+            prefersReducedMotion.addEventListener?.('change', onMotionChange);
+            listeningForMotion = true;
+            observer.observe(scene);
+        } catch (error) { settle(); }
+    };
+    start.prepare = prepare;
+    start.settle = settle;
+    start.setPaused = (value) => {
+        paused = value;
+        if (paused) { settle(); return; }
+        if (!animation) return;
+        [animation, ...heroAnimations].filter(Boolean).forEach(item => {
+            if (document.hidden) item.pause(); else item.play();
         });
-    }, {
-        threshold: 0.15,
-        rootMargin: '0px 0px -30px 0px'
-    });
-
-    revealItems.forEach((item) => revealObserver.observe(item));
+    };
+    document.addEventListener('visibilitychange', () => start.setPaused(paused));
+    return start;
 }
+const revealHeroPhone = initHeroPhone();
+// A missing decorative script must not prevent navigation or administration.
+const narrative = (() => {
+    try {
+        return typeof initStory === 'function'
+            ? initStory({ onScroll: () => revealHeroPhone.settle() })
+            : { setPaused() {} };
+    } catch (error) {
+        console.warn('El recorrido se mostrará sin animación.', error);
+        return { setPaused() {} };
+    }
+})();
+let dismissCinematicIntro = () => {};
+
+// No espera al evento load ni a recursos externos.
+function initCinematicIntro() {
+    const intro = document.getElementById('app-preloader');
+    if (!intro || prefersReducedMotion.matches || window.location.hash || window.scrollY > 0 ||
+        typeof intro.animate !== 'function') {
+        revealHeroPhone();
+        return;
+    }
+    const animations = [];
+    const skip = intro.querySelector('.intro-skip');
+    let finished = false;
+    let safetyTimer;
+    const finish = (animatePhone = false) => {
+        if (finished) return;
+        finished = true;
+        intro.hidden = true;
+        dismissCinematicIntro = () => {};
+        revealHeroPhone(animatePhone === true);
+        animations.forEach((animation) => animation.cancel());
+        window.clearTimeout(safetyTimer);
+        window.removeEventListener('scroll', finish);
+        window.removeEventListener('pagehide', finish);
+        document.removeEventListener('keydown', onKeydown);
+        document.removeEventListener('focusin', onFocus);
+        prefersReducedMotion.removeEventListener?.('change', onMotionChange);
+        skip?.removeEventListener('click', finish);
+        if (document.activeElement === skip) {
+            const title = document.getElementById('hero-title');
+            title?.setAttribute('tabindex', '-1');
+            title?.focus({ preventScroll: true });
+        }
+    };
+    const onKeydown = (event) => { if (event.key === 'Escape') finish(); };
+    const onFocus = (event) => { if (!intro.contains(event.target)) finish(); };
+    const onMotionChange = () => { if (prefersReducedMotion.matches) finish(); };
+    safetyTimer = window.setTimeout(finish, 4500);
+    skip?.addEventListener('click', finish);
+    window.addEventListener('scroll', finish, { passive: true });
+    window.addEventListener('pagehide', finish);
+    document.addEventListener('keydown', onKeydown);
+    document.addEventListener('focusin', onFocus);
+    prefersReducedMotion.addEventListener?.('change', onMotionChange);
+    dismissCinematicIntro = () => finish();
+    intro.hidden = false;
+    try {
+        revealHeroPhone.prepare();
+        animations.push(intro.querySelector('.intro-brand').animate([
+            { opacity: 0, transform: 'translateY(14px) scale(0.96)' },
+            { opacity: 1, transform: 'translateY(0) scale(1)' }
+        ], { duration: 550, fill: 'both', easing: 'ease-out' }));
+        intro.querySelectorAll('.intro-words span').forEach((word, index) => {
+            animations.push(word.animate([
+                { opacity: 0, transform: 'translateY(18px)', offset: 0 },
+                { opacity: 1, transform: 'translateY(0)', offset: 0.25 },
+                { opacity: 1, transform: 'translateY(0)', offset: 0.75 },
+                { opacity: 0, transform: 'translateY(-12px)', offset: 1 }
+            ], { duration: 800, delay: 750 + index * 750, fill: 'both', easing: 'ease-out' }));
+        });
+        const exit = intro.animate([{ opacity: 1 }, { opacity: 0 }], {
+            duration: 550, delay: 3000, fill: 'forwards', easing: 'ease-in-out'
+        });
+        animations.push(exit);
+        exit.onfinish = () => finish(true);
+    } catch (error) {
+        finish();
+    }
+}
+initCinematicIntro();
 
 const hamburgerToggle = document.getElementById('hamburger-toggle');
 const navLinksMenu = document.getElementById('nav-links-menu');
@@ -52,123 +197,10 @@ navLinksMenu?.querySelectorAll('a').forEach((link) => {
     link.addEventListener('click', () => setMenuOpen(false));
 });
 
-const pinWrapper = document.querySelector('.explore-pin-wrapper');
-const exploreTrack = document.querySelector('.explore-track');
-let targetX = 0;
-let currentX = 0;
-let animationFrame = 0;
-
-function renderHorizontalScroll() {
-    animationFrame = 0;
-    if (!exploreTrack) return;
-
-    if (window.innerWidth <= 900 || prefersReducedMotion.matches) {
-        targetX = 0;
-        currentX = 0;
-        exploreTrack.style.transform = 'none';
-        return;
-    }
-
-    currentX += (targetX - currentX) * 0.16;
-    if (Math.abs(targetX - currentX) < 0.25) currentX = targetX;
-    exploreTrack.style.transform = `translateX(-${currentX}px)`;
-
-    if (currentX !== targetX) animationFrame = window.requestAnimationFrame(renderHorizontalScroll);
-}
-
-function scheduleHorizontalRender() {
-    if (!animationFrame) animationFrame = window.requestAnimationFrame(renderHorizontalScroll);
-}
-
-function updateHorizontalTarget() {
-    if (!pinWrapper || !exploreTrack || window.innerWidth <= 900 || prefersReducedMotion.matches) {
-        targetX = 0;
-        scheduleHorizontalRender();
-        return;
-    }
-
-    const rect = pinWrapper.getBoundingClientRect();
-    const pinHeight = rect.height - window.innerHeight;
-    const maxTranslate = Math.max(0, exploreTrack.scrollWidth - document.documentElement.clientWidth);
-
-    if (pinHeight <= 0) {
-        targetX = 0;
-    } else {
-        const progress = Math.min(1, Math.max(0, -rect.top / pinHeight));
-        targetX = progress * maxTranslate;
-    }
-    scheduleHorizontalRender();
-}
-
-window.addEventListener('scroll', updateHorizontalTarget, { passive: true });
-window.addEventListener('resize', updateHorizontalTarget);
 window.addEventListener('resize', () => {
     if (hamburgerToggle?.getAttribute('aria-expanded') !== 'true') setMenuOpen(false);
 });
-prefersReducedMotion.addEventListener?.('change', updateHorizontalTarget);
-updateHorizontalTarget();
 setMenuOpen(false);
-
-document.querySelectorAll('.card-toggle').forEach((button) => {
-    button.addEventListener('click', () => {
-        const card = button.closest('.explore-card');
-        const preview = document.getElementById(button.getAttribute('aria-controls'));
-        if (!card || !preview) return;
-
-        const isOpen = button.getAttribute('aria-expanded') === 'true';
-        document.querySelectorAll('.card-toggle').forEach((otherButton) => {
-            otherButton.setAttribute('aria-expanded', 'false');
-            otherButton.closest('.explore-card')?.classList.remove('active');
-            const label = otherButton.querySelector('.card-toggle-label');
-            if (label) label.textContent = 'Mostrar vista previa';
-        });
-        document.querySelectorAll('.card-preview-wrapper').forEach((item) => {
-            item.setAttribute('aria-hidden', 'true');
-            item.tabIndex = -1;
-        });
-
-        if (!isOpen) {
-            button.setAttribute('aria-expanded', 'true');
-            card.classList.add('active');
-            preview.setAttribute('aria-hidden', 'false');
-            preview.tabIndex = 0;
-            const label = button.querySelector('.card-toggle-label');
-            if (label) label.textContent = 'Ocultar vista previa';
-        }
-    });
-});
-
-const mapStatus = document.getElementById('map-status');
-if (window.L && document.getElementById('map')) {
-    try {
-        const map = window.L.map('map').setView([-18.4746, -70.3102], 17);
-        const tiles = window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
-
-        tiles.on('tileload', () => {
-            if (mapStatus) mapStatus.hidden = true;
-        });
-        tiles.on('tileerror', () => {
-            if (mapStatus) {
-                mapStatus.textContent = 'No se pudieron cargar las imágenes del mapa. Comprueba tu conexión.';
-                mapStatus.hidden = false;
-            }
-        });
-
-        window.L.marker([-18.4746, -70.3102]).addTo(map)
-            .bindPopup('<strong>Liceo B4 Antonio Varas</strong><br>Arica, Chile.');
-        if (mapStatus) mapStatus.hidden = true;
-    } catch (error) {
-        console.error('No se pudo inicializar el mapa:', error);
-        if (mapStatus) {
-            mapStatus.textContent = 'El mapa no está disponible. El resto de la página sigue funcionando.';
-        }
-    }
-} else if (mapStatus) {
-    mapStatus.textContent = 'No se pudo cargar el mapa interactivo. El resto de la página sigue funcionando.';
-}
 
 const adminModal = document.getElementById('admin-modal');
 const adminDashboard = document.getElementById('admin-dashboard');
@@ -185,6 +217,10 @@ let previousBodyOverflow = '';
 const pageRegions = document.querySelectorAll('.skip-link, .navbar, #main-content, .footer-institucional');
 
 function setPageRegionsInert(isInert) {
+    if (isInert) dismissCinematicIntro();
+    narrative.setPaused(isInert);
+    revealHeroPhone.setPaused(isInert);
+    document.body.classList.toggle('cinema-paused', isInert);
     pageRegions.forEach((region) => {
         region.inert = isInert;
     });
@@ -307,10 +343,6 @@ document.querySelectorAll('.admin-tab-btn').forEach((button) => {
 const studentDemoForm = document.getElementById('student-demo-form');
 const studentRutInput = document.getElementById('rut-input');
 const studentDemoStatus = document.getElementById('student-demo-status');
-const demoCourses = ['A', 'B', 'C', 'D', 'E'].flatMap((section) =>
-    [1, 2, 3, 4].map((grade) => `${grade}° Medio ${section}`)
-);
-
 function rutVerifier(body) {
     let sum = 0;
     let multiplier = 2;
@@ -402,8 +434,7 @@ studentDemoForm?.addEventListener('submit', (event) => {
     studentDemoStatus.classList.toggle('is-error', !isValid);
     studentDemoStatus.classList.toggle('is-success', isValid);
     if (isValid) {
-        const course = demoCourses[Math.floor(Math.random() * demoCourses.length)];
-        studentDemoStatus.textContent = `Consulta simulada: estudiante detectado en ${course}.`;
+        studentDemoStatus.textContent = 'Formato válido. Consulta simulada: curso de ejemplo 3° Medio A. No se consultaron matrículas.';
     } else {
         studentDemoStatus.textContent = 'Revisa el RUT: debe tener 7 u 8 dígitos y un dígito verificador válido.';
     }
@@ -420,7 +451,7 @@ document.querySelectorAll('.demo-form').forEach((form) => {
 
 document.getElementById('demo-sync-schedule')?.addEventListener('click', () => {
     const status = document.getElementById('schedule-demo-status');
-    if (status) status.textContent = 'Horarios sincronizados correctamente.';
+    if (status) status.textContent = 'Demostración: archivo revisado; no se sincronizaron horarios.';
 });
 
 document.getElementById('file-upload')?.addEventListener('change', (event) => {

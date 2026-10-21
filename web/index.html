@@ -6,30 +6,51 @@
     <title>LiceoMap - Sistema de Gestión Escolar y Orientación Espacial</title>
     <meta name="description" content="Plataforma de orientación espacial, horarios y comunicación para la comunidad del Liceo Antonio Varas de la Barra.">
     <meta name="theme-color" content="#0f172a">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Phase 4.5: prepare visibility before the first paint; static HTML stays visible. -->
+    <script>
+        (() => {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+                window.location.hash || window.scrollY > 0 ||
+                typeof Element.prototype.animate !== 'function' || !('IntersectionObserver' in window)) return;
+            const root = document.documentElement;
+            const release = () => root.classList.remove('intro-preparing');
+            // Fail open even if a deferred script never loads or initialization stalls.
+            window.liceomapIntroFallback = window.setTimeout(release, 6000);
+            window.addEventListener('pagehide', release, { once: true });
+            root.classList.add('intro-preparing');
+        })();
+    </script>
+    <!-- /Phase 4.5 -->
+    <!-- Existing typefaces, served locally with their SIL Open Font licenses. -->
+    <link rel="preload" href="fonts/outfit-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/plus-jakarta-sans-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
     <!-- Dependencias externas fijadas a versiones concretas -->
     <script defer src="https://unpkg.com/feather-icons@4.29.2/dist/feather.min.js" integrity="sha384-qEqAs1VsN9WH2myXDbiP2wGGIttL9bMRZBKCl54ZnzpDlVqbYANP9vMaoT/wvQcf" crossorigin="anonymous"></script>
-    <!-- Leaflet CSS for Interactive Map -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
     <!-- Main Stylesheet -->
     <link rel="stylesheet" href="style.css">
-    <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="purpose.css">
+    <link rel="stylesheet" href="finale.css">
+    <script defer src="vendor/gsap-3.15.0.min.js"></script>
+    <script defer src="vendor/ScrollTrigger-3.15.0.min.js"></script>
+    <script defer src="story.js"></script>
     <script defer src="app.js"></script>
+    <script defer src="purpose.js"></script>
+    <script defer src="finale.js"></script>
 </head>
 <body>
 
     <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
 
-    <!-- PRELOADER SIMPLE Y AGRADABLE -->
-    <div id="app-preloader" class="preloader">
-        <div class="preloader-content">
-            <img src="logo_lm_ligero-removebg-preview.png" alt="LiceoMap Logo" class="preloader-logo">
-            <div class="preloader-spinner"></div>
-            <span class="preloader-text">Cargando LiceoMap...</span>
+    <!-- Introducción opcional; oculta si JavaScript no está disponible. -->
+    <div id="app-preloader" class="preloader" hidden>
+        <div class="preloader-content" aria-hidden="true">
+            <div class="intro-brand">
+                <img src="logo.png" alt="" width="1254" height="1254" class="preloader-logo">
+                <span class="intro-name">Liceo<span>Map.</span></span>
+            </div>
+            <div class="intro-words"><span>EXPLORA.</span><span>UBÍCATE.</span><span>CONÉCTATE.</span></div>
         </div>
+        <button class="intro-skip" type="button">Saltar introducción</button>
     </div>
 
     <!-- Fondo con Malla Gradiente Sutil -->
@@ -40,7 +61,7 @@
     ========================================= -->
     <nav class="navbar" aria-label="Navegación principal">
         <a href="#" class="nav-logo-wrapper">
-            <img src="logo_lm_ligero-removebg-preview.png" alt="LiceoMap Logo" class="nav-logo-img">
+            <img src="logo.png" alt="LiceoMap Logo" class="nav-logo-img">
             <span class="nav-logo">Liceo<span class="dot">Map.</span></span>
         </a>
 
@@ -54,13 +75,13 @@
 
         <!-- Botón de Hamburguesa para Móvil -->
         <button class="hamburger-btn" id="hamburger-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-links-menu">
-            <i data-feather="menu"></i>
+            <span class="hamburger-label">Menú</span>
         </button>
 
         <div class="nav-links" id="nav-links-menu">
             <a href="#concepto">Concepto</a>
-            <a href="#servicios">Módulos App</a>
-            <a href="#mapa-container">Mapa Interactivo</a>
+            <a href="#servicios">Recorrido</a>
+            <a href="#proyecto">El proyecto</a>
             <a href="#anuncios">Anuncios</a>
             <a href="#admin-modal" class="btn-nav-primary btn-nav-admin" id="btn-open-admin">
                 <i data-feather="shield" aria-hidden="true"></i> Inicio Sesión Admin
@@ -71,251 +92,207 @@
        HERO SECTION
     ========================================= -->
     <main id="main-content">
-    <header class="hero" id="concepto" aria-labelledby="hero-title">
-        <img src="image_fddc2f.png" alt="" width="1536" height="1024" fetchpriority="high" decoding="async" class="hero-bg-image">
-        <div class="hero-overlay"></div>
-
-        <div class="hero-content">
-            <div class="hero-status-bar reveal-on-scroll">
-                <div class="status-indicator">
-                    <span class="status-dot"></span>
-                    <span>Proyecto Piloto Oficial • Liceo B4 Arica</span>
-                </div>
-                <div class="status-indicator">
-                    <i data-feather="shield"></i>
-                    <span>Sistema de Gestión Escolar</span>
-                </div>
+    <div class="story" id="recorrido">
+        <div class="cinema-viewport">
+            <div class="ambient ambient-blue" aria-hidden="true"></div>
+            <div class="ambient ambient-teal" aria-hidden="true"></div>
+            <div class="cinema-grid" aria-hidden="true"></div>
+            <div class="story-stage">
+                <figure class="hero-phone" aria-labelledby="hero-phone-caption">
+                    <div class="phone-stage"><div class="phone-story"><div class="phone-entrance"><div class="phone-device">
+                        <div class="phone-screen" role="img" aria-label="Inicio de LiceoMap, datos de demostración">
+                            <img class="screen-layer screen-home" src="home.png" alt="" aria-hidden="true" width="691" height="1536" decoding="async" fetchpriority="high">
+                            <img class="screen-layer screen-map" src="mapa.png" alt="" aria-hidden="true" width="1080" height="2400" decoding="async" loading="lazy">
+                            <img class="screen-layer screen-news" src="anuncios.png" alt="" aria-hidden="true" width="691" height="1536" decoding="async" loading="lazy">
+                        </div>
+                    </div></div></div></div>
+                    <figcaption id="hero-phone-caption">Inicio · Demostración de la app</figcaption>
+                </figure>
             </div>
-
-            <h1 id="hero-title" class="hero-title-group reveal-on-scroll reveal-delay-1">
-                <span class="hero-title mask-text">EXPLORA.</span>
-                <span class="hero-title mask-text accent-text">UBÍCATE.</span>
-                <span class="hero-title mask-text">CONÉCTATE.</span>
-            </h1>
-
-            <p class="hero-subtitle reveal-on-scroll reveal-delay-2">
-                Plataforma digital de orientación espacial, consulta de horarios por RUT y comunicación directa en tiempo real para la comunidad del Liceo Antonio Varas de la Barra.
-            </p>
-
-            <div class="hero-actions reveal-on-scroll reveal-delay-3">
-                <a href="#mapa-container" class="btn-hero-primary">
-                    <i data-feather="navigation"></i> Abrir Mapa del Liceo B4
-                </a>
-                <a href="#servicios" class="btn-hero-secondary">
-                    <i data-feather="smartphone"></i> Conocer la App
-                </a>
-                <a href="#app-preview" class="btn-hero-secondary btn-hero-download">
-                    <i data-feather="download"></i> Probar App
-                </a>
+            <figure class="closing-map" aria-labelledby="closing-map-caption">
+                <img src="mapa.png" alt="Captura del plano de referencia con bloques y pasillos del liceo" width="1080" height="2400" loading="lazy" decoding="async">
+                <figcaption id="closing-map-caption">Plano de referencia · Captura de demostración</figcaption>
+            </figure>
+            <div class="story-scenes">
+                <header class="story-scene hero" id="concepto" data-label="Inicio" data-screen="home" aria-labelledby="hero-title">
+                    <div class="scene-copy">
+                    <p class="eyebrow">LiceoMap / Una mirada a tu día</p>
+                    <h1 id="hero-title"><span class="headline-line">Tu colegio.</span> <span class="headline-line narrative-accent">Más cerca.</span></h1>
+                    <p class="scene-lead">Tus espacios, tus clases, tu comunidad. Descubre lo que busca acercar LiceoMap.</p>
+                    </div>
+                    <div class="scene-actions"><a class="btn-hero-primary" href="#servicios">Comenzar el recorrido <span aria-hidden="true">↓</span></a></div>
+                    <p class="scene-note">Interfaces reales. Datos de demostración.</p>
+                </header>
+                <section class="story-scene" id="servicios" data-label="Plano de referencia" data-screen="map" aria-labelledby="salas-title">
+                    <div class="scene-copy">
+                    <p class="eyebrow">01 / Orientación</p>
+                    <h2 id="salas-title"><span class="headline-line">¿Te pierdes</span> <span class="headline-line narrative-accent">buscando tu sala?</span></h2>
+                    <p class="scene-lead">LiceoMap busca ayudarte a ubicar los espacios del liceo con un plano visual.</p>
+                    <div class="story-card"><span class="card-index">ORIENTACIÓN ESCOLAR</span><h3>Encuentra tu camino.</h3><p>Ubica bloques y pasillos. Plano de referencia, sin búsqueda activa de salas.</p><a class="text-link capture-link" href="mapa.png">Ampliar plano <span aria-hidden="true">↗</span></a></div>
+                    </div>
+                </section>
+                <section class="story-scene" id="horarios" data-label="Inicio · Próxima clase" data-screen="home" aria-labelledby="horarios-title">
+                    <div class="scene-copy">
+                    <p class="eyebrow">02 / Tu jornada</p>
+                    <h2 id="horarios-title"><span class="headline-line">¿No recuerdas</span> <span class="headline-line narrative-accent">qué clase te toca?</span></h2>
+                    <p class="scene-lead">Una vista de tu próxima clase para organizar mejor la jornada escolar.</p>
+                    <div class="story-card"><span class="card-index">TU PRÓXIMA CLASE</span><h3>Anticípate a lo que viene.</h3><p>Inicio muestra datos ficticios. La consulta web también es demostrativa.</p><a class="text-link" href="#app-preview">Probar la consulta demo <span aria-hidden="true">↗</span></a><a class="text-link capture-link" href="home.png">Ampliar Inicio</a></div>
+                    </div>
+                </section>
+                <section class="story-scene" id="anuncios" data-label="Anuncios" data-screen="news" aria-labelledby="anuncios-title">
+                    <div class="scene-copy">
+                    <p class="eyebrow">03 / Comunidad</p>
+                    <h2 id="anuncios-title"><span class="headline-line">¿Te enteras tarde</span> <span class="headline-line narrative-accent">de los avisos?</span></h2>
+                    <p class="scene-lead">Noticias y comunicados en un mismo lugar para seguir la vida del liceo.</p>
+                    </div>
+                    <div class="story-card notification-card"><span class="notification-icon" aria-hidden="true">↗</span><span class="card-index">COMUNIDAD AL DÍA</span><h3>Lo importante, más cerca.</h3><p>Ejemplos de biblioteca y convivencia. Esta web no recibe avisos en tiempo real.</p><div class="notice-tags" aria-hidden="true"><span>Noticias</span><span>Comunicados</span></div><a class="text-link capture-link" href="anuncios.png">Ampliar anuncios</a></div>
+                    <div class="notification-chip" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span>Noticias de tu comunidad</span></div>
+                </section>
+                <section class="story-scene" id="orientacion" data-label="Inicio · Cierre" data-screen="home" aria-labelledby="orientacion-title">
+                    <div class="scene-copy">
+                    <p class="eyebrow">04 / El próximo paso es tuyo</p>
+                    <h2 id="orientacion-title"><span class="headline-line">Un proyecto.</span> <span class="headline-line narrative-accent">Tu comunidad.</span></h2>
+                    <p class="scene-lead">Del primer bloque del día al próximo lugar al que quieres llegar. Conoce el proyecto y explora sus herramientas de demostración.</p>
+                    </div>
+                    <div class="story-card"><span class="card-index">EXPLORA. UBÍCATE. CONÉCTATE.</span><h3>Tu punto de partida.</h3><p>Plano, consultas y panel de demostración. Explora el proyecto.</p><div class="scene-actions"><a class="btn-hero-primary" href="#proyecto">Conocer el proyecto</a><a class="text-link" href="#app-preview">Explorar herramientas ↗</a></div></div>
+                </section>
             </div>
+            <nav class="cinema-controls" aria-label="Escenas del recorrido">
+                <button type="button" data-scene="0" aria-label="Presentación" aria-current="step"><span>01</span></button>
+                <button type="button" data-scene="1" aria-label="Orientación y salas"><span>02</span></button>
+                <button type="button" data-scene="2" aria-label="Próxima clase"><span>03</span></button>
+                <button type="button" data-scene="3" aria-label="Anuncios"><span>04</span></button>
+                <button type="button" data-scene="4" aria-label="Cierre"><span>05</span></button>
+            </nav>
+            <a href="#proyecto" class="cinema-exit">Saltar recorrido ↗</a>
         </div>
-
-        <div class="hero-scroll-indicator">
-            <span>Desliza para explorar</span>
-            <div class="scroll-line"></div>
-        </div>
-    </header>
-
-    <!-- =========================================
-       SECCIÓN EDITORIAL 1: CONCEPTO
-    ========================================= -->
-    <section class="editorial-split-section">
-        <div class="editorial-img-wrapper reveal-on-scroll">
-            <img src="estudiantes.png" alt="Estudiantes del Liceo B4 en una actividad escolar" width="1538" height="1022" loading="lazy" decoding="async">
-            <div class="img-badge">
-                <i data-feather="check-circle"></i> Orientación Rápida
-            </div>
-        </div>
-        <div class="editorial-content reveal-on-scroll reveal-delay-1">
-            <span class="editorial-tag">01 / Innovación Escolar</span>
-            <h2>Navegación Intuitiva para Estudiantes y Docentes</h2>
-            <p>
-                Eliminamos la desorientación en los pasillos del establecimiento. Con nuestro visor interactivo y directorio integrado, cualquier miembro de la comunidad puede encontrar salas, laboratorios y oficinas administrativas al instante.
-            </p>
-            <ul class="editorial-list">
-                <li><i data-feather="check"></i> Buscador de salas por nombre y pabellón.</li>
-                <li><i data-feather="check"></i> Visualización de rutas y accesos principales.</li>
-                <li><i data-feather="check"></i> Optimizado para dispositivos móviles y tablets.</li>
-            </ul>
-        </div>
-    </section>
-
-    <!-- =========================================
-       EXPLORE SECTION (MÓDULOS DE LA APLICACIÓN DESTACADOS)
-    ========================================= -->
-    <div class="explore-pin-wrapper" id="servicios">
-        <section class="explore-section">
-            <div class="explore-track">
-                <div class="explore-header reveal-on-scroll">
-                    <span class="editorial-tag accent-badge">Módulos Principales</span>
-                    <h2>Aplicación Móvil en Acción</h2>
-                    <p>Diseñada específicamente para acelerar la orientación diaria con interfaces claras, vistas previas interactivas y respuestas al instante.</p>
-                </div>
-
-                <!-- Tarjeta 1: Buscador -->
-                <div class="explore-card float-anim reveal-on-scroll reveal-delay-1">
-                    <div class="app-glow-effect"></div>
-                    <div class="card-top">
-                        <span class="card-num">01</span>
-                        <div class="badge-app-live"><span class="pulse-dot"></span> App en vivo</div>
-                    </div>
-                    <h3>Buscador de Salas</h3>
-                    <p>Encuentra tu aula en segundos. Filtra por pabellón, piso o especialidad técnica y obtén la ruta directa.</p>
-
-                    <button class="expand-hint card-toggle" type="button" aria-expanded="false" aria-controls="preview-salas">
-                        <i data-feather="mouse-pointer" class="icon-small" aria-hidden="true"></i>
-                        <span class="card-toggle-label">Mostrar vista previa</span>
-                    </button>
-
-                    <div class="card-preview-wrapper glow-box" id="preview-salas" role="region" aria-label="Vista previa desplazable del buscador de salas" aria-hidden="true" tabindex="-1">
-                        <img src="salas.png" alt="Vista previa del módulo de búsqueda de salas" width="1080" height="2400" loading="lazy" decoding="async" class="card-preview-img">
-                    </div>
-                </div>
-
-                <!-- Tarjeta 2: Horarios -->
-                <div class="explore-card float-anim reveal-delay-2-anim reveal-on-scroll reveal-delay-2">
-                    <div class="app-glow-effect cyan-glow"></div>
-                    <div class="card-top">
-                        <span class="card-num">02</span>
-                        <div class="badge-app-live"><span class="pulse-dot"></span> App en vivo</div>
-                    </div>
-                    <h3>Horarios por RUT</h3>
-                    <p>Consulta personalizada para estudiantes y profesores. Planificación diaria sincronizada por UTP.</p>
-
-                    <button class="expand-hint card-toggle" type="button" aria-expanded="false" aria-controls="preview-horarios">
-                        <i data-feather="mouse-pointer" class="icon-small" aria-hidden="true"></i>
-                        <span class="card-toggle-label">Mostrar vista previa</span>
-                    </button>
-
-                    <div class="card-preview-wrapper glow-box" id="preview-horarios" role="region" aria-label="Vista previa desplazable de horarios" aria-hidden="true" tabindex="-1">
-                        <img src="horarios.png" alt="Vista previa del módulo de horarios" width="1080" height="2400" loading="lazy" decoding="async" class="card-preview-img">
-                    </div>
-                </div>
-
-                <!-- Tarjeta 3: Anuncios -->
-                <div class="explore-card float-anim reveal-delay-3-anim reveal-on-scroll reveal-delay-3">
-                    <div class="app-glow-effect amber-glow"></div>
-                    <div class="card-top">
-                        <span class="card-num">03</span>
-                        <div class="badge-app-live"><span class="pulse-dot"></span> App en vivo</div>
-                    </div>
-                    <h3>Avisos en Tiempo Real</h3>
-                    <p>Comunicados oficiales de dirección e inspectoría directo a tu pantalla. Entérate de eventos y talleres.</p>
-
-                    <button class="expand-hint card-toggle" type="button" aria-expanded="false" aria-controls="preview-anuncios">
-                        <i data-feather="mouse-pointer" class="icon-small" aria-hidden="true"></i>
-                        <span class="card-toggle-label">Mostrar vista previa</span>
-                    </button>
-
-                    <div class="card-preview-wrapper glow-box" id="preview-anuncios" role="region" aria-label="Vista previa desplazable de anuncios" aria-hidden="true" tabindex="-1">
-                        <img src="anuncios.png" alt="Vista previa del módulo de anuncios" width="1080" height="2400" loading="lazy" decoding="async" class="card-preview-img">
-                    </div>
-                </div>
-            </div>
-        </section>
     </div>
 
-    <!-- =========================================
-       MAPA INTERACTIVO SECTION
-    ========================================= -->
-    <section class="map-section" id="mapa-container">
-        <div class="map-wrapper reveal-on-scroll">
-            <div id="map" role="region" aria-label="Mapa interactivo del Liceo B4 Antonio Varas"></div>
-            <p id="map-status" class="map-status" role="status">Cargando el mapa…</p>
-            <div class="map-overlay">
-                <div class="map-overlay-header">
-                    <div class="live-dot"></div>
-                    <h3>Liceo B4 Antonio Varas</h3>
-                </div>
-                <p><i data-feather="map-pin" class="icon-small" aria-hidden="true"></i> Arica, Región de Arica y Parinacota</p>
-                <div class="map-quick-buttons" role="group" aria-label="Sectores del establecimiento">
-                    <span class="btn-map-quick">Pabellón A</span>
-                    <span class="btn-map-quick">Pabellón B</span>
-                    <span class="btn-map-quick">Laboratorios</span>
-                </div>
+    <!-- Phase 5: semantic document; the cinematic controller progressively stages it. -->
+    <section class="purpose-section" id="proyecto" aria-label="LiceoMap: propósito, origen y visión">
+        <div class="purpose-masthead"><span>LiceoMap / El proyecto</span><span>Una idea que nos conecta <span aria-hidden="true">↘</span></span></div>
+        <nav class="purpose-nav" aria-label="Capítulos del proyecto">
+            <a href="#que-es"><span>01</span> La idea</a>
+            <a href="#problematica"><span>02</span> El desafío</a>
+            <a href="#objetivo"><span>03</span> El objetivo</a>
+            <a href="#vision"><span>04</span> La visión</a>
+            <a class="purpose-skip" href="#app-preview">Ir a la demo ↗</a>
+        </nav>
+
+        <section class="purpose-chapter purpose-intro" id="que-es" aria-labelledby="project-title">
+            <div class="purpose-light" aria-hidden="true"></div>
+            <p class="purpose-kicker"><span>01 / La idea</span> ¿Qué es LiceoMap?</p>
+            <h2 id="project-title" class="purpose-title purpose-title-large"><span class="purpose-line">¿QUÉ ES</span> <span class="purpose-line"><em>LICEOMAP?</em></span></h2>
+            <div class="purpose-intro-bottom">
+                <div class="purpose-wordmark" aria-hidden="true"><span>Espacios.</span><span>Información.</span><span>Comunidad<span class="purpose-period">.</span></span></div>
+                <div class="purpose-copy purpose-reveal"><p><strong>LiceoMap es un proyecto de plataforma digital</strong> que busca conectar a la comunidad educativa mediante herramientas de orientación, organización e información escolar.</p><p>Una nueva manera de vivir el liceo. Un punto de encuentro pensado para estudiantes y docentes.</p><a class="purpose-link" href="#problematica">Todo comienza con una necesidad <span aria-hidden="true">↓</span></a></div>
             </div>
-        </div>
+        </section>
+
+        <section class="purpose-chapter purpose-challenge" id="problematica" aria-labelledby="challenge-title">
+            <div class="purpose-light" aria-hidden="true"></div>
+            <p class="purpose-kicker"><span>02 / El desafío</span> Lo cotidiano también importa</p>
+            <div class="purpose-heading-row"><h2 id="challenge-title" class="purpose-title"><span class="purpose-line">Tantas preguntas.</span> <span class="purpose-line"><em>Todo disperso.</em></span></h2><p class="purpose-copy purpose-reveal">Cuando la información está dispersa, una tarea sencilla puede volverse una duda más en la jornada.</p></div>
+            <ol class="purpose-frictions">
+                <li class="purpose-friction"><div class="purpose-card-top"><span>01 / Espacios</span><svg aria-hidden="true" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M5 27V5h14v22M19 12h8v15H5M10 11h4m-4 6h4m-4 6h4m8-5h2m-2 5h2"/></svg></div><h3>¿Dónde queda<br> mi sala?</h3><p>Ubicar salas y espacios puede ser difícil, especialmente cuando todavía estás conociendo el liceo.</p><span class="purpose-card-foot">Encontrar un lugar</span></li>
+                <li class="purpose-friction"><div class="purpose-card-top"><span>02 / Horarios</span><svg aria-hidden="true" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="5" y="7" width="22" height="21" rx="3"/><path d="M10 4v6m12-6v6M5 14h22m-17 5h4m4 0h4m-12 4h4"/></svg></div><h3>¿Qué clase me<br> toca ahora?</h3><p>Consultar horarios entre distintas fuentes puede generar confusión sobre la clase o el espacio que corresponde.</p><span class="purpose-card-foot">Ordenar la jornada</span></li>
+                <li class="purpose-friction"><div class="purpose-card-top"><span>03 / Comunicados</span><svg aria-hidden="true" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M5 8h22v15H15l-6 5v-5H5V8Zm5 6h12m-12 4h8"/></svg></div><h3>¿Dónde encuentro<br> los avisos importantes?</h3><p>Los comunicados no siempre llegan de forma clara y oportuna a quienes necesitan recibirlos.</p><span class="purpose-card-foot">Compartir lo importante</span></li>
+            </ol>
+            <p class="purpose-aside purpose-reveal">Tres situaciones cotidianas. Una misma necesidad: acercar la información a las personas.</p>
+        </section>
+
+        <section class="purpose-chapter purpose-objective" id="objetivo" aria-labelledby="objective-title">
+            <div class="purpose-light" aria-hidden="true"></div>
+            <p class="purpose-kicker"><span>03 / El objetivo</span> Conectar lo que hace falta</p>
+            <div class="purpose-heading-row"><h2 id="objective-title" class="purpose-title"><span class="purpose-line">Todo lo que necesitas.</span> <span class="purpose-line"><em>En un solo lugar.</em></span></h2><p class="purpose-copy purpose-reveal">Nuestro objetivo es centralizar herramientas útiles y facilitar la experiencia cotidiana de estudiantes y docentes.</p></div>
+            <div class="purpose-network">
+                <div class="purpose-hub" aria-hidden="true"><span class="purpose-hub-dot"></span> LiceoMap <span class="purpose-hub-caption">Una comunidad conectada</span></div>
+                <svg class="purpose-connections" viewBox="0 0 1000 100" preserveAspectRatio="none" fill="none" aria-hidden="true"><path class="purpose-connection-base" d="M500 0V35H167V100M500 35V100M500 35H833V100"/><path class="purpose-connection-light" pathLength="1" d="M500 0V35H167V100M500 35V100M500 35H833V100"/></svg>
+                <ol class="purpose-pillars">
+                    <li class="purpose-pillar"><span class="purpose-node" aria-hidden="true"></span><span class="purpose-pillar-label">Encontrar</span><h3>Orientación</h3><p>Acercar los espacios del liceo para moverse con mayor claridad.</p></li>
+                    <li class="purpose-pillar"><span class="purpose-node" aria-hidden="true"></span><span class="purpose-pillar-label">Ordenar</span><h3>Organización</h3><p>Reunir información escolar útil para planificar la jornada.</p></li>
+                    <li class="purpose-pillar"><span class="purpose-node" aria-hidden="true"></span><span class="purpose-pillar-label">Compartir</span><h3>Comunicación</h3><p>Favorecer el acceso a noticias y comunicados de la comunidad.</p></li>
+                </ol>
+            </div>
+            <p class="purpose-aside purpose-reveal">Estos pilares orientan el desarrollo del proyecto y su integración futura.</p>
+        </section>
+
+        <section class="purpose-chapter purpose-vision" id="vision" aria-labelledby="vision-title">
+            <div class="purpose-light" aria-hidden="true"></div>
+            <p class="purpose-kicker"><span>04 / La visión</span> Un origen concreto. Un horizonte abierto.</p>
+            <h2 id="vision-title" class="purpose-title"><span class="purpose-line">Comenzamos en un liceo.</span> <span class="purpose-line">Pensamos en <em>muchos más.</em></span></h2>
+            <div class="purpose-vision-grid">
+                <div class="purpose-origin purpose-reveal">
+                    <!-- This graphic is symbolic, not a plan or photograph of the school. -->
+                    <div class="purpose-origin-outro"><div class="purpose-origin-art" aria-hidden="true"><span class="purpose-community community-a"></span><span class="purpose-community community-b"></span><span class="purpose-community community-c"></span><span class="purpose-community community-d"></span><span class="purpose-origin-ring"></span><span class="purpose-origin-ring"></span><span class="purpose-origin-point"></span><span class="purpose-origin-coordinate">ARICA / CHILE</span></div></div>
+                    <!-- Optional authorized photograph: replace the symbolic art above with
+                         Use a figure with class purpose-school-photo, an img with
+                         descriptive alt text, real width/height, loading=lazy,
+                         and a figcaption containing the credit and authorization.
+                         Use an approved local asset and its real dimensions; no image is required. -->
+                    <div class="purpose-origin-caption"><span>El punto de partida</span><p>Liceo Bicentenario de Excelencia<br><strong>Antonio Varas de la Barra</strong></p><span>Arica, Chile</span></div>
+                </div>
+                <div class="purpose-copy purpose-vision-copy purpose-reveal"><p class="purpose-vision-lead">Una idea local.<br><em>Una posibilidad compartida.</em></p><p>LiceoMap nace para responder a las necesidades de esta comunidad educativa. Conocer su realidad es el punto de partida para construir herramientas con sentido.</p><div class="purpose-future"><span class="purpose-status">Visión a futuro</span><p>Aspiramos a que LiceoMap pueda adaptarse a otros establecimientos educativos, considerando sus espacios, su organización y su comunidad. Esa expansión es una posibilidad futura, aún no implementada.</p></div></div>
+            </div>
+            <div class="purpose-handoff purpose-reveal"><div><p class="purpose-kicker">De la idea a un primer vistazo</p><h3>Ahora, explóralo tú.</h3><p>Las interfaces del recorrido y los componentes de demostración permiten conocer el avance del proyecto. La consulta que sigue usa datos de ejemplo; no consulta matrícula ni horarios reales.</p></div><a class="btn-hero-primary" href="#app-preview">Probar la demostración <span aria-hidden="true">↗</span></a></div>
+        </section>
     </section>
 
-    <!-- =========================================
-       ANUNCIOS SECTION
-    ========================================= -->
-    <section class="anuncios-section" id="anuncios">
-        <div class="anuncios-header reveal-on-scroll">
-            <div>
-                <span class="editorial-tag alert-tag">Actualidad Institucional</span>
-                <h2>Tablón de Anuncios y Comunicados</h2>
-            </div>
-            <p>Información oficial emitida por UTP e Inspectoría General del establecimiento.</p>
-        </div>
-
-        <div class="anuncios-grid">
-            <div class="anuncio-card urgente reveal-on-scroll reveal-delay-1">
-                <div class="anuncio-meta">
-                    <time datetime="2026-09-29">29 Septiembre 2026</time>
-                    <span class="tag-urgente">Urgente</span>
-                </div>
-                <h3>Modificación de Horario por Actividad Académica</h3>
-                <p>Se comunica a toda la comunidad estudiantil que la jornada de la tarde finalizará a las 16:30 hrs por consejo de profesores extraordinario.</p>
-                <span class="anuncio-link">Leer comunicado completo &rarr;</span>
-            </div>
-
-            <div class="anuncio-card reveal-on-scroll reveal-delay-2">
-                <div class="anuncio-meta">
-                    <time datetime="2026-09-27">27 Septiembre 2026</time>
-                    <span class="tag-info">Informativo</span>
-                </div>
-                <h3>Apertura de Inscripciones para Talleres Extraescolares</h3>
-                <p>Ya se encuentran abiertas las postulaciones para los talleres deportivos y artísticos del segundo semestre. Inscríbete desde la app móvil.</p>
-                <span class="anuncio-link">Ver detalles &rarr;</span>
-            </div>
-
-            <div class="anuncio-card reveal-on-scroll reveal-delay-3">
-                <div class="anuncio-meta">
-                    <time datetime="2026-09-25">25 Septiembre 2026</time>
-                    <span class="tag-info">General</span>
-                </div>
-                <h3>Actualización del Plano de Ubicación en Pabellón C</h3>
-                <p>Las salas del tercer piso del pabellón C han sido renombradas según la nueva distribución técnica. Consulta el mapa interactivo actualizado.</p>
-                <span class="anuncio-link">Revisar cambios &rarr;</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- =========================================
-       APP PREVIEW / LOGIN MOCKUP SECTION
-    ========================================= -->
-    <section class="app-preview-section" id="app-preview">
-        <div class="app-preview-box reveal-on-scroll">
+    <section class="app-preview-section" id="app-preview" aria-labelledby="demo-title" tabindex="-1">
+        <div class="demo-night" aria-hidden="true"></div>
+        <div class="demo-edge" aria-hidden="true"><div class="demo-edge-night"></div></div>
+        <div class="demo-coordinate" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="app-preview-box">
             <div class="app-preview-text">
-                <span class="editorial-tag">Prueba el Sistema</span>
-                <h2>Consulta tu Horario y Sala con tu RUT</h2>
-                <p>Ingresa tu identificador personal para comprobar el funcionamiento directo de la aplicación orientada a estudiantes.</p>
-                <div class="app-features-mini">
-                    <div class="feature-item">
-                        <i data-feather="check-circle"></i> Sin necesidad de registros complejos
-                    </div>
-                    <div class="feature-item">
-                        <i data-feather="check-circle"></i> Sincronización automática con UTP
-                    </div>
-                </div>
+                <p class="eyebrow">De una comunidad a tu día</p>
+                <h2 id="demo-title"><span class="demo-title-line">Tu curso.</span> <span class="demo-title-line">Tu información.</span> <span class="demo-title-line">Tu lugar.</span></h2>
+                <p>Así podría empezar una experiencia más cercana. Explora cómo se mostraría el curso de un estudiante, con un perfil completamente ficticio.</p>
+                <p class="demo-disclaimer">Demostración local. Sin conexión a matrícula, sin datos personales y sin asignación de un curso real.</p>
             </div>
-            <div class="app-mockup-card pulse-glow">
-                <div class="mockup-header">
-                    <img src="logo_lm_ligero-removebg-preview.png" alt="Icon" width="563" height="443" decoding="async" class="mockup-logo">
-                    <span>LiceoMap - Acceso Alumnos</span>
+            <div class="demo-interface-reveal">
+                <div class="app-mockup-card" id="course-demo">
+                    <div class="mockup-header"><img src="logo.png" alt="" width="1254" height="1254" decoding="async" class="mockup-logo"><span>LiceoMap <small>Vista de estudiante</small></span><span class="demo-badge">Datos ficticios</span></div>
+                    <div class="course-stage" id="course-stage" aria-busy="false">
+                        <div class="course-view" data-demo-view="identity">
+                            <p class="demo-step-label">01 / Identificación de ejemplo</p>
+                            <div class="demo-identity"><span class="demo-avatar" aria-hidden="true">LM</span><div><h3>Estudiante de ejemplo</h3><p>Perfil ficticio · LM-DEMO-03</p></div></div>
+                            <p class="demo-view-copy">Un perfil preparado para explorar la idea. Puedes comenzar sin escribir un RUT.</p>
+                            <button type="button" class="btn-mockup" id="course-demo-start" hidden>Ver demostración <span aria-hidden="true">↗</span></button>
+                            <noscript><p class="demo-static-result">Curso de ejemplo: <strong>3° Medio A</strong>. Este resultado es ficticio. Activa JavaScript para recorrer la simulación.</p></noscript>
+                        </div>
+                        <div class="course-view" data-demo-view="process" hidden>
+                            <p class="demo-step-label">02 / Proceso ilustrativo</p>
+                            <h3>Una consulta, paso a paso.</h3>
+                            <ol class="demo-process">
+                                <li><span aria-hidden="true">01</span><div>Identificación de ejemplo<small>Se utiliza el perfil ficticio preparado.</small></div></li>
+                                <li><span aria-hidden="true">02</span><div>Validación ilustrativa<small>No se verifica una identidad real.</small></div></li>
+                                <li><span aria-hidden="true">03</span><div>Consulta institucional simulada<small>Sin conexión a sistemas del liceo.</small></div></li>
+                            </ol>
+                            <button type="button" class="demo-text-button" id="course-demo-skip">Omitir animación y ver resultado</button>
+                        </div>
+                        <div class="course-view" data-demo-view="result" hidden>
+                            <p class="demo-step-label">03 / Resultado demostrativo</p>
+                            <div class="demo-result-card"><span class="demo-confirmation" aria-hidden="true">✓</span><p>Curso de ejemplo</p><h3 id="course-result-title" tabindex="-1">3° Medio A</h3><span class="demo-result-caption">Perfil ficticio · Sin asignación real</span></div>
+                            <p class="demo-view-copy">Una integración institucional futura permitiría mostrar la información correspondiente al estudiante. Aquí siempre se muestra el mismo curso de ejemplo.</p>
+                            <button type="button" class="demo-text-button" id="course-demo-repeat">Repetir demostración <span aria-hidden="true">↺</span></button>
+                        </div>
+                    </div>
+                    <p class="demo-live" id="course-demo-live" role="status" aria-live="polite" aria-atomic="true">Demostración preparada. No necesitas datos personales.</p>
+                    <details class="demo-manual">
+                        <summary>Validar el formato de un RUT <span>(opcional)</span></summary>
+                        <p>Solo comprueba el formato y el dígito verificador. No identifica estudiantes ni consulta matrículas. Puedes usar el ejemplo del campo.</p>
+                        <form class="mockup-form" id="student-demo-form">
+                            <label for="rut-input">RUT de ejemplo</label>
+                            <input type="text" id="rut-input" placeholder="Ej: 22.709.631-4" autocomplete="off" autocapitalize="characters" spellcheck="false" inputmode="text" maxlength="12" aria-describedby="rut-help" required>
+                            <p id="rut-help" class="rut-help">Escribe los números y el dígito verificador; los puntos y el guion se agregan automáticamente. Este dato no se guarda ni se envía.</p>
+                            <button type="submit" class="btn-mockup">Probar consulta</button>
+                            <p id="student-demo-status" class="rut-feedback" role="status" aria-live="polite" hidden></p>
+                        </form>
+                    </details>
                 </div>
-                <form class="mockup-form" id="student-demo-form">
-                    <label for="rut-input">Ingrese su RUT</label>
-                    <input type="text" id="rut-input" placeholder="Ej: 22.709.631-4" autocomplete="off" autocapitalize="characters" spellcheck="false" inputmode="text" maxlength="12" aria-describedby="rut-help" required>
-                    <p id="rut-help" class="rut-help">Escribe los números y el dígito verificador; los puntos y el guion se agregan automáticamente.</p>
-                    <button type="submit" class="btn-mockup">Consultar Mi Estado</button>
-                    <p id="student-demo-status" class="rut-feedback" role="status" aria-live="polite" hidden></p>
-                </form>
             </div>
         </div>
     </section>
-
     </main>
     <!-- =========================================
        FOOTER INSTITUCIONAL
@@ -323,22 +300,22 @@
     <footer class="footer-institucional">
         <div class="footer-info">
             <div class="footer-brand">
-                <img src="logo_lm_ligero-removebg-preview.png" alt="Logo" width="563" height="443" loading="lazy" decoding="async" class="footer-logo">
+                <img src="logo.png" alt="Logo" width="1254" height="1254" loading="lazy" decoding="async" class="footer-logo">
                 <h4>LiceoMap</h4>
             </div>
-            <p>Plataforma oficial de orientación espacial y gestión escolar.<br>Liceo B4 Antonio Varas de la Barra • Arica, Chile.</p>
+            <p>Proyecto de orientación espacial y gestión escolar.<br>Liceo B4 Antonio Varas de la Barra • Arica, Chile.</p>
         </div>
         <div class="footer-links">
             <span class="footer-title">Navegación</span>
             <a href="#concepto">Concepto</a>
             <a href="#servicios">Módulos</a>
-            <a href="#mapa-container">Mapa Interactivo</a>
+            <a href="#proyecto">El proyecto</a>
             <a href="#anuncios">Anuncios</a>
         </div>
         <div class="footer-links">
             <span class="footer-title">Administración</span>
             <a href="#admin-modal" id="footer-admin-link">Inicio Sesión Admin</a>
-            <a href="#app-preview">Probar App Móvil</a>
+            <a href="#app-preview">Probar demostración</a>
         </div>
     </footer>
 
@@ -351,7 +328,7 @@
             <div class="modal-header">
                 <i data-feather="shield" class="modal-icon" aria-hidden="true"></i>
                 <h2 id="admin-dialog-title">Acceso Administrativo</h2>
-                <p>Ingreso exclusivo para Dirección, UTP e Inspectoría</p>
+                <p>Panel de demostración para Dirección, UTP e Inspectoría. No autentica usuarios ni guarda cambios.</p>
             </div>
             <form id="admin-login-form" class="modal-form">
                 <div class="form-group">
@@ -404,16 +381,16 @@
         <div class="admin-content">
             <header class="admin-topbar">
                 <h2 id="admin-dashboard-title" tabindex="-1">Panel de Administración Institucional</h2>
-                <span class="live-status"><span class="pulse-dot"></span> Sistema en línea</span>
+                <span class="live-status"><span class="pulse-dot"></span> Modo demostración</span>
             </header>
 
             <!-- PESTAÑA: GESTIONAR ANUNCIOS -->
             <div id="tab-anuncios" class="admin-panel active" role="tabpanel" aria-labelledby="tab-button-anuncios" tabindex="0">
                 <div class="panel-header">
                     <h3>Publicar Comunicado Oficial</h3>
-                    <p>Envía anuncios en tiempo real a la app de los estudiantes.</p>
+                    <p>Prueba el formulario de anuncios. No envía comunicados a estudiantes.</p>
                 </div>
-                <form class="dashboard-form demo-form" data-demo-message="Comunicado publicado correctamente.">
+                <form class="dashboard-form demo-form" data-demo-message="Demostración: comunicado validado; no se publicó.">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="demo-announcement-title">Título del Anuncio</label>
@@ -441,7 +418,7 @@
             <div id="tab-horarios" class="admin-panel hidden" role="tabpanel" aria-labelledby="tab-button-horarios" tabindex="0" hidden>
                 <div class="panel-header">
                     <h3>Sincronización de Horarios (UTP)</h3>
-                    <p>Sube el archivo Excel o CSV del sistema para actualizar la base de datos de los estudiantes.</p>
+                    <p>Selecciona un archivo de ejemplo. No se carga ni actualiza una base de datos.</p>
                 </div>
                 <label class="upload-zone">
                     <i data-feather="upload-cloud" class="upload-icon" aria-hidden="true"></i>
@@ -460,9 +437,9 @@
             <div id="tab-salas" class="admin-panel hidden" role="tabpanel" aria-labelledby="tab-button-salas" tabindex="0" hidden>
                 <div class="panel-header">
                     <h3>Gestión de Espacios Físicos</h3>
-                    <p>Renombra sectores o actualiza el uso de las salas si fueron modificadas.</p>
+                    <p>Prueba la edición de espacios. Los cambios no se guardan.</p>
                 </div>
-                <form class="dashboard-form demo-form" data-demo-message="Mapa actualizado. Los cambios se reflejarán en la app.">
+                <form class="dashboard-form demo-form" data-demo-message="Demostración: cambios revisados; no se guardaron.">
                     <div class="form-group">
                         <label for="demo-map-sector">Seleccionar Sector del Mapa</label>
                         <select id="demo-map-sector">
@@ -485,7 +462,7 @@
             <div id="tab-usuarios" class="admin-panel hidden" role="tabpanel" aria-labelledby="tab-button-usuarios" tabindex="0" hidden>
                 <div class="panel-header">
                     <h3>Gestión de Matrícula y Accesos</h3>
-                    <p>Busca estudiantes por RUT para verificar su curso asignado o blanquear contraseñas.</p>
+                    <p>Filtra la tabla de ejemplo por nombre o RUT. No consulta registros reales.</p>
                 </div>
                 <form class="search-bar" id="demo-search-form">
                     <i data-feather="search"></i>

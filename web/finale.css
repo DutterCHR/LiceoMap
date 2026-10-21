@@ -1,0 +1,88 @@
+/* Phase 5.2. Final scene only; no selectors affect the approved phone or admin. */
+.purpose-dusk { position: absolute; inset: 0; z-index: 6; pointer-events: none; opacity: 0; background: #0c1727; }
+.purpose-outro-edge { position: absolute; left: 0; right: 0; bottom: 0; height: 140px; z-index: 7; pointer-events: none; opacity: 0; background: linear-gradient(transparent, #0b252a); }
+.purpose-outro-edge-night { position: absolute; inset: 0; opacity: 0; background: linear-gradient(transparent, #0c1727); }
+.demo-edge { position: absolute; top: 0; left: 0; right: 0; height: 140px; pointer-events: none; background: linear-gradient(#0b252a, transparent); }
+.demo-edge-night { position: absolute; inset: 0; opacity: 1; background: linear-gradient(#0c1727, transparent); }
+.app-preview-section { position: relative; isolation: isolate; border-top: 0; background: #0b252a; padding-block: clamp(5rem, 12svh, 9rem); overflow: clip; scroll-margin-top: 80px; outline: none; }
+.demo-night { position: absolute; inset: 0; z-index: -1; background: #0c1727; opacity: 1; }
+.app-preview-box { position: relative; z-index: 1; padding: 0; grid-template-columns: minmax(0, 1fr) minmax(350px, .95fr); max-width: 1440px; margin: auto; gap: clamp(2rem, 5vw, 6rem); align-items: start; }
+.app-preview-text .eyebrow { color: #a7eed9; font-size: .75rem; letter-spacing: .12em; margin-bottom: 1.7rem; }
+.app-preview-text h2 { font: 450 clamp(3.5rem, 6vw, 6.4rem)/1.04 var(--font-display); letter-spacing: -.045em; margin-bottom: 2rem; }
+.demo-title-line { display: block; }
+.demo-title-line:last-child { color: #a7eed9; }
+.app-preview-text > p { max-width: 43ch; font-size: clamp(1.0625rem, 1.25vw, 1.1875rem); line-height: 1.75; color: #d0dedf; }
+.app-preview-text .demo-disclaimer { font-size: .875rem; line-height: 1.7; margin-top: 1.5rem; max-width: 48ch; color: #b7cad0; }
+.demo-interface-reveal { transform-origin: 50% 35%; }
+.app-preview-section .app-mockup-card { position: relative; border: 1px solid #769b9c66; border-radius: 1.4rem; background: linear-gradient(145deg, #18323d, #112331); box-shadow: 0 24px 65px #020b1433; padding: clamp(1.25rem, 2.5vw, 2.3rem); }
+.app-preview-section .mockup-header { gap: .7rem; font-size: 1.15rem; margin-bottom: 1.5rem; }
+.mockup-header small { display: block; color: #bbd0d3; font: 400 .75rem/1.5 var(--font-body); }
+.mockup-header .demo-badge { margin-left: auto; padding: .25rem .55rem; color: #bbecdc; border: 1px solid #6dab9659; border-radius: 999px; font: 500 .65rem/1.5 var(--font-body); white-space: nowrap; }
+.course-stage { min-height: 330px; display: grid; align-items: start; }
+.course-view { grid-area: 1 / 1; min-width: 0; }
+/* Reserve the tallest view without measuring each frame. Visibility + inert
+   keep inactive views out of focus and the accessibility tree. */
+.course-view[hidden] { display: block !important; visibility: hidden; pointer-events: none; }
+.app-preview-section button[hidden] { display: none; }
+.demo-step-label { color: #b9ded5; font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 1.4rem; }
+.demo-identity { display: flex; align-items: center; gap: .9rem; padding: 1.25rem 0; }
+.demo-avatar { display: grid; place-items: center; flex-shrink: 0; width: 50px; height: 56px; color: #b7f3dd; background: #2b5555; border: 1px solid #80b3a466; border-radius: 14px; font: 450 1.25rem var(--font-display); }
+.course-view h3 { font: 500 clamp(1.25rem, 1.7vw, 1.65rem)/1.2 var(--font-display); letter-spacing: -.02em; }
+.demo-identity p { font-size: .8rem; color: #bbced3; margin-top: .4rem; }
+.demo-view-copy, .demo-static-result { color: #d0dedf; font-size: 1rem; line-height: 1.7; max-width: 48ch; margin-block: 1rem 1.4rem; }
+.app-preview-section .btn-mockup { display: flex; align-items: center; justify-content: center; gap: 1.5rem; width: 100%; min-height: 48px; margin: 0; font: 600 .95rem var(--font-body); background: #a7eed9; color: #102c32; border: 1px solid #a7eed9; border-radius: .8rem; padding: .85rem 1rem; cursor: pointer; }
+.app-preview-section .btn-mockup:hover { background: #c5f7e9; }
+.app-preview-section :is(button, summary, input):focus-visible { outline: 3px solid #d5fff0; outline-offset: 4px; }
+.demo-process { list-style: none; display: grid; gap: 1rem; margin-block: 1.3rem; }
+.demo-process li { display: flex; align-items: flex-start; gap: .85rem; color: #d2e2e3; font-size: .875rem; line-height: 1.45; }
+.demo-process li > span { display: grid; place-items: center; min-width: 26px; height: 26px; border: 1px solid #729b9b; border-radius: 50%; font-size: .65rem; }
+.demo-process li[data-complete] > span { background: #a7eed9; color: #102c32; }
+.demo-process small { display: block; color: #bbd0d3; font-size: .8rem; line-height: 1.6; margin-top: .2rem; }
+.demo-text-button { min-height: 44px; display: inline-flex; align-items: center; gap: 1rem; border: 0; border-bottom: 1px solid #91cbb7; padding: .5rem 0; background: transparent; color: #baf4df; font: 500 .85rem var(--font-body); cursor: pointer; }
+.demo-result-card { position: relative; padding: 1.4rem 1.5rem; border: 1px solid #7bbea675; border-radius: 1rem; background: #244c4a66; }
+.demo-confirmation { position: absolute; right: 1.3rem; top: 1.3rem; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #a7eed9; color: #102c32; font-size: 1rem; }
+.demo-result-card > p { color: #d1e3df; font-size: .9rem; }
+.demo-result-card h3 { color: #d7fff0; font-size: clamp(2.25rem, 3vw, 3rem); margin-block: .5rem .8rem; }
+.demo-result-card h3:focus-visible { outline: 2px solid #baf4df; outline-offset: 4px; border-radius: 4px; }
+.demo-result-caption { display: block; color: #bad7cd; font-size: .75rem; line-height: 1.6; }
+.demo-live { color: #b6cbd0; border-top: 1px solid #72999b44; padding-top: 1rem; font-size: .8rem; line-height: 1.7; margin-top: 1.5rem; min-height: calc(1rem + 5.1em); }
+.demo-manual { margin-top: 1.3rem; border-top: 1px solid #72999b44; padding-top: 1.15rem; }
+.demo-manual summary { color: #e0ebe9; font-size: .85rem; line-height: 1.7; cursor: pointer; min-height: 36px; }
+.demo-manual summary span { color: #b9cdd2; }
+.demo-manual > p { font-size: .875rem; line-height: 1.7; color: #c1d2d5; margin-block: .75rem 1.25rem; }
+.demo-manual .mockup-form { gap: 1rem; }
+.demo-manual .mockup-form label { color: #c8dddf; font-size: .8rem; }
+.demo-manual .mockup-form input { font-size: 1rem; }
+.demo-manual .rut-help { font-size: .85rem; line-height: 1.6; color: #bbced3; margin-top: -.4rem; }
+.demo-manual .rut-feedback { font-size: .9rem; line-height: 1.6; }
+.demo-coordinate { position: absolute; top: 3rem; left: 18%; width: 340px; height: 340px; border: 1px solid #a7eed955; border-radius: 50%; pointer-events: none; opacity: .22; }
+.demo-coordinate::before { content: ''; position: absolute; inset: 24%; border: 1px solid #a7eed977; border-radius: 50%; }
+.demo-coordinate span { position: absolute; width: 10px; height: 10px; border: 1px solid #a7eed9; border-radius: 50%; background: #173b3f; top: 18%; left: 18%; }
+.demo-coordinate span:nth-child(2) { top: 70%; left: 92%; }
+.demo-coordinate span:nth-child(3) { top: 90%; left: 28%; }
+@media (max-width: 900px) {
+    .app-preview-box { grid-template-columns: 1fr; max-width: 650px; }
+    .app-preview-section { padding-block: 5rem; }
+    .app-preview-text h2 { font-size: clamp(2.5rem, 9.5vw, 5rem); }
+    .app-preview-text > p { font-size: 1rem; }
+    .app-preview-text .demo-disclaimer { font-size: .875rem; }
+    .app-preview-text .eyebrow { font-size: .7rem; }
+    .course-stage { min-height: 350px; }
+    .demo-view-copy { font-size: .9375rem; }
+    .demo-step-label { font-size: .6875rem; }
+    .demo-coordinate { left: 5%; width: 220px; height: 220px; }
+}
+@media (max-width: 360px) {
+    .mockup-header .demo-badge { white-space: normal; max-width: 65px; font-size: .6rem; }
+    .app-preview-section .mockup-header { font-size: 1rem; gap: .5rem; }
+    .mockup-header small { font-size: .65rem; }
+    .demo-identity { gap: .65rem; }
+    .demo-identity h3 { font-size: 1.15rem; }
+    .demo-identity p { font-size: .7rem; }
+    .demo-result-card { padding-inline: 1rem; }
+    .demo-result-card h3 { font-size: 2rem; }
+    .demo-confirmation { right: .8rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .app-preview-section *, .purpose-origin-outro { animation: none !important; transition: none !important; }
+}

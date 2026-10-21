@@ -1,0 +1,14 @@
+[
+  {
+    "viewport": [
+      1280,
+      720
+    ],
+    "maxRotation": 3,
+    "minScale": 1,
+    "maxScale": 1.0386,
+    "minX": -121.6,
+    "maxX": 121.6,
+    "samples": 93
+  }
+]

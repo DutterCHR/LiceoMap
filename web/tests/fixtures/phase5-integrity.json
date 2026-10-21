@@ -1,0 +1,18 @@
+{
+  "story": "643bf6c29b28cba66e2d652f0eca18cd064083e04b247f58e2276ce58b1fb9e8",
+  "loaderHTML": "31401b0d03bce8bf34bf41104ea379a656d44f42cf7c35389da2ab816cdc58e3",
+  "cinemaHTML": "083d2c036d5eb6e460a2feea2ae5b55cc5952a7e91c62ae163afff12f3947415",
+  "demoFooterAdminHTML": "02fd8eaf55bf54afa1963351ceedcb3fd6a5c2b90cd98779be43393935e4ee0c",
+  "entryLoaderNavigationJS": "605a26fc03ce03c4498687e903a3c71dc2974e6448f0225a2655cefb4e782d5e",
+  "adminAndFormsJS": "9b053dd42f87f8aadaba0d8c10c2ca40f617d4c98891ee397fb32f881227b72c",
+  "cinemaCSS": "7d7389517ee5cdb558b77f7393db7858e44ddc283aea1c936e1770cdc61f47c0",
+  "adminAndFormsCSS": "cce06dbf548544256b3be2a25872f127259a1f4390bace27d8fc5eb5cc1ab60d",
+  "app-admin.js": "127e37971d60812755ba591fd105f974d57ed02e6fff26e2b7042535ede3f802",
+  "mapa.png": "26075ce53dbb530295c7207f95ea21e5deba2d19a912cc4c47c7f750976ca534",
+  "home.png": "d79a8d4ee2138ceca7e8f9b67f73a74d22755b446c004e99cc4907eb942e6671",
+  "anuncios.png": "10f8adf65225a2488729ea9a05a8ed84c21ef6f250b110cc662c7b80e87a3879",
+  "login.png": "42260c3ebe364e5c35a4947da092de6becbc196cb263531e4cf79820ff23fba9",
+  "logo.png": "96d1b7053c298dead576bfe5818e7e1212ed019b87705399bd1191c360802701",
+  "fonts/outfit-latin-variable.woff2": "6c18d579fd87c3776be068b762cbc83fde3acb543d49eabd3ade842eb987e887",
+  "fonts/plus-jakarta-sans-latin-variable.woff2": "153fc85b70298beeb1d61a5f723331649e7f23bb77302a66e61cb3e2fbdb5e79"
+}

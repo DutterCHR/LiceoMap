@@ -1,0 +1,538 @@
+[
+  {
+    "scene": "concepto",
+    "viewport": [
+      390,
+      844
+    ],
+    "dpr": 2,
+    "phone": {
+      "x": 100.55110168457031,
+      "y": 238.60360717773438,
+      "width": 188.89781188964844,
+      "height": 407.9802551269531,
+      "top": 238.60360717773438,
+      "right": 289.44891357421875,
+      "bottom": 646.5838623046875,
+      "left": 100.55110168457031
+    },
+    "scale": 0.9737,
+    "x": 0,
+    "y": -9,
+    "contrasts": [
+      {
+        "element": "eyebrow",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "headline-line",
+        "ratio": 9.095786709871593
+      },
+      {
+        "element": "headline-line narrative-accent",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "scene-lead",
+        "ratio": 6.535568831047328
+      },
+      {
+        "element": "scene-note",
+        "ratio": 5.7880261393580525
+      }
+    ],
+    "planOverlaps": [],
+    "angles": [
+      0,
+      0,
+      0
+    ],
+    "image": "home.png",
+    "source": [
+      691,
+      1536
+    ],
+    "imageWidth": 177.21337890625,
+    "imageOpacity": 1,
+    "imageVisibility": "visible",
+    "pixelRatio": 1.949627066152706,
+    "filters": [
+      "none",
+      "none",
+      "none",
+      "none",
+      "none",
+      "none",
+      "none"
+    ],
+    "overlaps": [],
+    "inside": true,
+    "controlsGap": 75.734375,
+    "controls": {
+      "x": 23.390625,
+      "y": 798,
+      "width": 169.1875,
+      "height": 30,
+      "top": 798,
+      "right": 192.578125,
+      "bottom": 828,
+      "left": 23.390625
+    },
+    "exit": {
+      "x": 268.3125,
+      "y": 790.40625,
+      "width": 98.296875,
+      "height": 44,
+      "top": 790.40625,
+      "right": 366.609375,
+      "bottom": 834.40625,
+      "left": 268.3125
+    },
+    "caption": {
+      "x": 194.5,
+      "y": 779,
+      "width": 1,
+      "height": 1,
+      "top": 779,
+      "right": 195.5,
+      "bottom": 780,
+      "left": 194.5
+    }
+  },
+  {
+    "scene": "servicios",
+    "viewport": [
+      390,
+      844
+    ],
+    "dpr": 2,
+    "phone": {
+      "x": 98,
+      "y": 203.59375,
+      "width": 194,
+      "height": 419,
+      "top": 203.59375,
+      "right": 292,
+      "bottom": 622.59375,
+      "left": 98
+    },
+    "scale": 1,
+    "x": 0,
+    "y": -38.5,
+    "contrasts": [
+      {
+        "element": "eyebrow",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "headline-line",
+        "ratio": 9.39842130089455
+      },
+      {
+        "element": "headline-line narrative-accent",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "scene-lead",
+        "ratio": 6.535568831047328
+      },
+      {
+        "element": "card-index",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "P",
+        "ratio": 6.535568831047328
+      },
+      {
+        "element": "text-link capture-link",
+        "ratio": 6.532483378786233
+      }
+    ],
+    "planOverlaps": [],
+    "angles": [
+      0,
+      0,
+      0
+    ],
+    "image": "mapa.png",
+    "source": [
+      1080,
+      2400
+    ],
+    "imageWidth": 182,
+    "imageOpacity": 1,
+    "imageVisibility": "visible",
+    "pixelRatio": 2.967032967032967,
+    "filters": [
+      "none",
+      "none",
+      "none",
+      "none",
+      "none",
+      "none",
+      "none"
+    ],
+    "overlaps": [],
+    "inside": true,
+    "controlsGap": 75.734375,
+    "controls": {
+      "x": 23.390625,
+      "y": 798,
+      "width": 169.1875,
+      "height": 30,
+      "top": 798,
+      "right": 192.578125,
+      "bottom": 828,
+      "left": 23.390625
+    },
+    "exit": {
+      "x": 268.3125,
+      "y": 790.40625,
+      "width": 98.296875,
+      "height": 44,
+      "top": 790.40625,
+      "right": 366.609375,
+      "bottom": 834.40625,
+      "left": 268.3125
+    },
+    "caption": {
+      "x": 194.5,
+      "y": 779,
+      "width": 1,
+      "height": 1,
+      "top": 779,
+      "right": 195.5,
+      "bottom": 780,
+      "left": 194.5
+    }
+  },
+  {
+    "scene": "horarios",
+    "viewport": [
+      390,
+      844
+    ],
+    "dpr": 2,
+    "phone": {
+      "x": 98,
+      "y": 203.59375,
+      "width": 194,
+      "height": 419,
+      "top": 203.59375,
+      "right": 292,
+      "bottom": 622.59375,
+      "left": 98
+    },
+    "scale": 1,
+    "x": 0,
+    "y": -38.5,
+    "contrasts": [
+      {
+        "element": "eyebrow",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "headline-line",
+        "ratio": 9.39842130089455
+      },
+      {
+        "element": "headline-line narrative-accent",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "scene-lead",
+        "ratio": 6.535568831047328
+      },
+      {
+        "element": "card-index",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "P",
+        "ratio": 6.535568831047328
+      },
+      {
+        "element": "text-link",
+        "ratio": 6.532483378786233
+      },
+      {
+        "element": "text-link capture-link",
+        "ratio": 6.532483378786233
+      }
+    ],
+    "planOverlaps": [],
+    "angles": [
+      0,
+      0,
+      0
+    ],
+    "image": "home.png",
+    "source": [
+      691,
+      1536
+    ],
+    "imageWidth": 182,
+    "imageOpacity": 1,
+    "imageVisibility": "visible",
+    "pixelRatio": 1.8983516483516483,
+    "filters": [
+      "none",
+      "none",
+      "none",
+      "none",
+      "none",
+      "none",
+      "none"
+    ],
+    "overlaps": [],
+    "inside": true,
+    "controlsGap": 75.734375,
+    "controls": {
+      "x": 23.390625,
+      "y": 798,
+      "width": 169.1875,
+      "height": 30,
+      "top": 798,
+      "right": 192.578125,
+      "bottom": 828,
+      "left": 23.390625
+    },
+    "exit": {
+      "x": 268.3125,
+      "y": 790.40625,
+      "width": 98.296875,
+      "height": 44,
+      "top": 790.40625,
+      "right": 366.609375,
+      "bottom": 834.40625,
+      "left": 268.3125
+    },
+    "caption": {
+      "x": 194.5,
+      "y": 779,
+      "width": 1,
+      "height": 1,
+      "top": 779,
+      "right": 195.5,
+      "bottom": 780,
+      "left": 194.5
+    }
+  },
+  {
+    "scene": "anuncios",
+    "viewport": [
+      390,
+      844
+    ],
+    "dpr": 2,
+    "phone": {
+      "x": 98,
+      "y": 203.59375,
+      "width": 194,
+      "height": 419,
+      "top": 203.59375,
+      "right": 292,
+      "bottom": 622.59375,
+      "left": 98
+    },
+    "scale": 1,
+    "x": 0,
+    "y": -38.5,
+    "contrasts": [
+      {
+        "element": "eyebrow",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "headline-line",
+        "ratio": 9.39842130089455
+      },
+      {
+        "element": "headline-line narrative-accent",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "scene-lead",
+        "ratio": 6.535568831047328
+      },
+      {
+        "element": "card-index",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "P",
+        "ratio": 6.535568831047328
+      },
+      {
+        "element": "text-link capture-link",
+        "ratio": 6.532483378786233
+      }
+    ],
+    "planOverlaps": [],
+    "angles": [
+      0,
+      0,
+      0
+    ],
+    "image": "anuncios.png",
+    "source": [
+      691,
+      1536
+    ],
+    "imageWidth": 182,
+    "imageOpacity": 1,
+    "imageVisibility": "visible",
+    "pixelRatio": 1.8983516483516483,
+    "filters": [
+      "none",
+      "none",
+      "none",
+      "none",
+      "none",
+      "none",
+      "none"
+    ],
+    "overlaps": [],
+    "inside": true,
+    "controlsGap": 75.734375,
+    "controls": {
+      "x": 23.390625,
+      "y": 798,
+      "width": 169.1875,
+      "height": 30,
+      "top": 798,
+      "right": 192.578125,
+      "bottom": 828,
+      "left": 23.390625
+    },
+    "exit": {
+      "x": 268.3125,
+      "y": 790.40625,
+      "width": 98.296875,
+      "height": 44,
+      "top": 790.40625,
+      "right": 366.609375,
+      "bottom": 834.40625,
+      "left": 268.3125
+    },
+    "caption": {
+      "x": 194.5,
+      "y": 779,
+      "width": 1,
+      "height": 1,
+      "top": 779,
+      "right": 195.5,
+      "bottom": 780,
+      "left": 194.5
+    }
+  },
+  {
+    "scene": "orientacion",
+    "viewport": [
+      390,
+      844
+    ],
+    "dpr": 2,
+    "phone": {
+      "x": 102.85970306396484,
+      "y": 203.58970642089844,
+      "width": 184.28060913085938,
+      "height": 398.008056640625,
+      "top": 203.58970642089844,
+      "right": 287.1403121948242,
+      "bottom": 601.5977630615234,
+      "left": 102.85970306396484
+    },
+    "scale": 0.9499,
+    "x": 0,
+    "y": -49,
+    "contrasts": [
+      {
+        "element": "eyebrow",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "headline-line",
+        "ratio": 9.39842130089455
+      },
+      {
+        "element": "headline-line narrative-accent",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "scene-lead",
+        "ratio": 6.535568831047328
+      },
+      {
+        "element": "card-index",
+        "ratio": 7.433473263168604
+      },
+      {
+        "element": "P",
+        "ratio": 6.535568831047328
+      },
+      {
+        "element": "text-link",
+        "ratio": 6.532483378786233
+      }
+    ],
+    "planOverlaps": [],
+    "angles": [
+      0,
+      0,
+      0
+    ],
+    "image": "mapa.png",
+    "source": [
+      1080,
+      2400
+    ],
+    "imageWidth": 172.88180541992188,
+    "imageOpacity": 1,
+    "imageVisibility": "visible",
+    "pixelRatio": 3.1235212906781316,
+    "filters": [
+      "none",
+      "none",
+      "none",
+      "none",
+      "none",
+      "none",
+      "none"
+    ],
+    "overlaps": [],
+    "inside": true,
+    "controlsGap": 75.734375,
+    "controls": {
+      "x": 23.390625,
+      "y": 798,
+      "width": 169.1875,
+      "height": 30,
+      "top": 798,
+      "right": 192.578125,
+      "bottom": 828,
+      "left": 23.390625
+    },
+    "exit": {
+      "x": 268.3125,
+      "y": 790.40625,
+      "width": 98.296875,
+      "height": 44,
+      "top": 790.40625,
+      "right": 366.609375,
+      "bottom": 834.40625,
+      "left": 268.3125
+    },
+    "caption": {
+      "x": 194.5,
+      "y": 779,
+      "width": 1,
+      "height": 1,
+      "top": 779,
+      "right": 195.5,
+      "bottom": 780,
+      "left": 194.5
+    }
+  }
+]

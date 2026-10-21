@@ -1,0 +1,86 @@
+{
+  "browser": "Chrome/155.0.8059.85",
+  "baseline": true,
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 900,
+      "immersive": true,
+      "readingPreserved": false
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "immersive": true,
+      "readingPreserved": false
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "immersive": true,
+      "readingPreserved": false
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "immersive": true,
+      "readingPreserved": false
+    },
+    {
+      "width": 320,
+      "height": 720,
+      "immersive": false,
+      "readingPreserved": false
+    },
+    {
+      "width": 375,
+      "height": 780,
+      "immersive": false,
+      "readingPreserved": false
+    }
+  ],
+  "scrubExperiments": [
+    {
+      "value": true,
+      "gapAfterTwoFrames": 9.106947695958212e-10,
+      "settledWithinMs": 47.200000000186265
+    },
+    {
+      "value": 0.25,
+      "gapAfterTwoFrames": 0.00945744932339318,
+      "settledWithinMs": 271
+    },
+    {
+      "value": 0.35,
+      "gapAfterTwoFrames": 0.014542449323393158,
+      "settledWithinMs": 362
+    },
+    {
+      "value": 0.45,
+      "gapAfterTwoFrames": 0.01562544932339316,
+      "settledWithinMs": 475.29999999981374
+    }
+  ],
+  "performance": [
+    {
+      "id": "liceomap-cinema",
+      "samples": 299,
+      "durationMs": 3504,
+      "medianMs": 10,
+      "p95Ms": 10.100000000000136,
+      "maxMs": 11.900000000000091,
+      "over34ms": 0,
+      "longTasks": []
+    },
+    {
+      "id": "liceomap-finale",
+      "samples": 299,
+      "durationMs": 3500.4000000003725,
+      "medianMs": 10,
+      "p95Ms": 10.100000000000364,
+      "maxMs": 10.199999999999818,
+      "over34ms": 0,
+      "longTasks": []
+    }
+  ]
+}

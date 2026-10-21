@@ -1,0 +1,14 @@
+{
+  "description": "Phase 4.4 before the phase 4.5 phone preparation fix; app.js hash excludes only initHeroPhone.",
+  "hashes": {
+    "index.html": "c06f8c8b9e40c94a5e22ec41cc10c7f325ca6048ff31a44d0e6df990358aa812",
+    "style.css": "70eb0362b032328af0663a7a3aafdf8df563e3378683a57f82722f89ffac6364",
+    "story.js": "643bf6c29b28cba66e2d652f0eca18cd064083e04b247f58e2276ce58b1fb9e8",
+    "app.js": "05104c48930845f17a6331c75b9da44d775d1aa2411ae0b3996d36c53e0956f7",
+    "home.png": "d79a8d4ee2138ceca7e8f9b67f73a74d22755b446c004e99cc4907eb942e6671",
+    "mapa.png": "26075ce53dbb530295c7207f95ea21e5deba2d19a912cc4c47c7f750976ca534",
+    "anuncios.png": "10f8adf65225a2488729ea9a05a8ed84c21ef6f250b110cc662c7b80e87a3879",
+    "fonts/outfit-latin-variable.woff2": "6c18d579fd87c3776be068b762cbc83fde3acb543d49eabd3ade842eb987e887",
+    "fonts/plus-jakarta-sans-latin-variable.woff2": "153fc85b70298beeb1d61a5f723331649e7f23bb77302a66e61cb3e2fbdb5e79"
+  }
+}
